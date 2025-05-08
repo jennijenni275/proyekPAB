@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
-  // maps
   void _openGoogleMaps(double lat, double lng) async {
-    final url = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
+    final url = 'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng';
     if (await canLaunchUrl(Uri.parse(url))) {
       await launchUrl(Uri.parse(url));
     } else {
@@ -45,25 +45,54 @@ class HomeScreen extends StatelessWidget {
 
               return Card(
                 margin: const EdgeInsets.all(10),
-                child: ListTile(
-                  contentPadding: const EdgeInsets.all(8),
-                  leading: Image.network(
-                    imageUrl,
-                    width: 60,
-                    fit: BoxFit.cover,
-                  ),
-                  title: Text(name),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.map, color: Colors.blue),
-                    onPressed: () => _openGoogleMaps(latitude, longitude),
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(
-                      context,
-                      '/detail',
-                      arguments: museumDocs[index].id,
-                    );
-                  },
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Image.network(
+                        imageUrl,
+                        width: 60,
+                        height: 60,
+                        fit: BoxFit.cover,
+                      ),
+                      title: Text(name),
+                      subtitle: const Text('Lihat lokasi di peta'),
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context,
+                          '/detail',
+                          arguments: museumDocs[index].id,
+                        );
+                      },
+                    ),
+                    SizedBox(
+                      height: 150,
+                      child: GestureDetector(
+                        onTap: () => _openGoogleMaps(latitude, longitude),
+                        child: AbsorbPointer(
+                          child: GoogleMap(
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(latitude, longitude),
+                              zoom: 14,
+                            ),
+                            markers: {
+                              Marker(
+                                markerId: MarkerId(name),
+                                position: LatLng(latitude, longitude),
+                                infoWindow: InfoWindow(title: name),
+                              ),
+                            },
+                            zoomControlsEnabled: false,
+                            scrollGesturesEnabled: false,
+                            rotateGesturesEnabled: false,
+                            tiltGesturesEnabled: false,
+                            myLocationButtonEnabled: false,
+                            onMapCreated: (controller) {},
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                  ],
                 ),
               );
             },
