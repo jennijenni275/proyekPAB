@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "248437693697",
+    "project_id": "museglo-app",
+    "storage_bucket": "museglo-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248437693697:android:12bf3b53a42a1c60c2cf00",
+        "android_client_info": {
+          "package_name": "com.example.museglo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdkFlMZI4B4LasrEUIH6jT5uGdctw53XI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
