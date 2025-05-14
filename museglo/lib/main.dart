@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:museglo/screens/Homescreen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:museglo/screens/sign_in_screen.dart';
-import 'package:museglo/screens/sign_up_screen.dart';
+import 'package:museglo/screens/welcome_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -19,11 +17,8 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MuseGlo',
-      routes: {
-        '/signin': (context) => const SignInScreen(),
-        '/signup': (context) => const SignUpScreen(),
-        '/home': (context) => const HomeScreen(),
-      },
+      theme: ThemeData.dark(),
+      home: WelcomeScreen(), 
     );
   }
 }
