@@ -1,55 +1,91 @@
 import 'package:flutter/material.dart';
-import 'package:museglo/screens/detail_profile_screen.dart'; 
 
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+class DetailProfileScreen extends StatelessWidget {
+  const DetailProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(16.0),
-            color: Colors.grey[700],
-            child: Column(
-              children: [
-                const Icon(Icons.account_circle, size: 80, color: Colors.white),
-                const SizedBox(height: 8),
-                const Text('User', style: TextStyle(color: Colors.white, fontSize: 20)),
-                const Text('User@gmail.com', style: TextStyle(color: Colors.white70, fontSize: 16)),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          ListTile(
-            leading: const Icon(Icons.perm_identity, color: Colors.white),
-            title: const Text('Identitas', style: TextStyle(color: Colors.white)),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const DetailProfileScreen()),
+      appBar: AppBar(
+        title: const Text('Detail Profil'),
+        backgroundColor: Colors.grey[300],
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.nightlight_round),
+            onPressed: () {
+              // Toggle theme mode
+              final themeMode = Theme.of(context).brightness == Brightness.dark
+                  ? ThemeMode.light
+                  : ThemeMode.dark;
+              final ThemeData themeData = themeMode == ThemeMode.light
+                  ? ThemeData.light()
+                  : ThemeData.dark();
+
+              // Update the theme mode dynamically
+              Theme.of(context).copyWith(
+                primaryColor: themeData.primaryColor,
+                scaffoldBackgroundColor: themeData.scaffoldBackgroundColor,
               );
             },
-          ),
-          ListTile(
-            leading: const Icon(Icons.confirmation_num, color: Colors.white),
-            title: const Text('My Ticket', style: TextStyle(color: Colors.white)),
-          ),
-          ListTile(
-            leading: const Icon(Icons.star_border, color: Colors.white),
-            title: const Text('Favorites', style: TextStyle(color: Colors.white)),
-          ),
-          const Spacer(),
-          ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.grey[700],
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+          )
+        ],
+      ),
+      body: Stack(
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/background.png'), // Sesuaikan path background
+                fit: BoxFit.cover,
+              ),
             ),
-            child: const Text('Log Out', style: TextStyle(color: Colors.white)),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.account_circle, size: 100, color: Colors.grey),
+              const SizedBox(height: 16),
+              DetailProfileField(label: 'Username', value: 'User'),
+              DetailProfileField(label: 'Email', value: 'User@gmail.com'),
+              DetailProfileField(label: 'Phone', value: '08*****'),
+            ],
+          ),
+        ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
+      ),
+    );
+  }
+}
+
+class DetailProfileField extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const DetailProfileField({required this.label, required this.value, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(label, style: const TextStyle(color: Colors.black, fontSize: 16)),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(value, style: const TextStyle(color: Colors.black, fontSize: 16)),
           ),
         ],
       ),

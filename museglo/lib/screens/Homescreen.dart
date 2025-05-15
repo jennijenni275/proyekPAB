@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:museglo/screens/Map_screens.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:museglo/screens/Map_screens.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -9,48 +9,53 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
       appBar: AppBar(
+        title: const Text('MuseGlo'),
         backgroundColor: Colors.black,
-        title: const Text(
-          '★ MUSEGLO ★',
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 2,
-          ),
-        ),
         centerTitle: true,
       ),
-      body: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance.collection('museums').get(),
+      body: FutureBuilder<DatabaseEvent>(
+        future: FirebaseDatabase.instance.ref('museums').once(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return const Center(child: Text('Terjadi kesalahan.'));
+            return const Center(
+              child: Text('Terjadi kesalahan: Tidak dapat memuat data.'),
+            );
           }
 
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final museumDocs = snapshot.data?.docs ?? [];
-
-          if (museumDocs.isEmpty) {
-            return const Center(child: Text('Tidak ada museum.'));
+          if (!snapshot.hasData || snapshot.data?.snapshot.value == null) {
+            return const Center(
+              child: Text('Tidak ada museum yang ditemukan.'),
+            );
           }
 
+          final data = snapshot.data!.snapshot.value as Map<dynamic, dynamic>;
+          final museumList = data.entries.toList();
+
           return ListView.builder(
-            itemCount: museumDocs.length,
+            itemCount: museumList.length,
             itemBuilder: (context, index) {
-              final data = museumDocs[index].data() as Map<String, dynamic>;
+              final museumData = museumList[index].value as Map<dynamic, dynamic>;
+              final name = museumData['name'] ?? 'Museum Tidak Dikenal';
+              final description = museumData['description'] ?? 'deskripsi tidak ada';
+              final address = museumData['address'] ?? 'Alamat tidak ditemukan';
+              final artworks = (museumData['artworks'] ?? 0.0).toDouble();
+              final imageUrl = museumData['image'] ?? 'https://placehold.co/200x150/EEE/31343C?text=Gambar';
+              final latitude = (museumData['latitude'] ?? 0.0).toDouble();
+              final longitude = (museumData['longitude'] ?? 0.0).toDouble();
+
               return MuseumCard(
-                name: data['name'] ?? '',
-                imageUrl: data['image'] ?? '',
-                latitude: data['latitude'] ?? 0.0,
-                longitude: data['longitude'] ?? 0.0,
-                description: data['description'] ?? '',
-                address: data['address'] ?? '',
-                artworks: data['artworks'] ?? [],
+                name: name,
+                description: description,
+                address: address,
+                artworks: artworks,
+                imageUrl: imageUrl,
+                latitude: latitude,
+                longitude: longitude,
               );
             },
           );
@@ -62,120 +67,97 @@ class HomeScreen extends StatelessWidget {
 
 class MuseumCard extends StatelessWidget {
   final String name;
+  final String description;
+  final String address;
+  final int artworks;
   final String imageUrl;
   final double latitude;
   final double longitude;
-  final String description;
-  final String address;
-  final List artworks;
 
   const MuseumCard({
     super.key,
     required this.name,
-    required this.imageUrl,
-    required this.latitude,
-    required this.longitude,
     required this.description,
     required this.address,
     required this.artworks,
+    required this.imageUrl,
+    required this.latitude,
+    required this.longitude,
   });
 
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.black,
-      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      elevation: 6,
+      margin: const EdgeInsets.all(10),
+      elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Column(
-        children: [
-          Stack(
-            alignment: Alignment.bottomLeft,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              leading: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
                 child: Image.network(
                   imageUrl,
-                  height: 180,
-                  width: double.infinity,
+                  width: 60,
+                  height: 60,
                   fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      width: 60,
+                      height: 60,
+                      color: Colors.grey[300],
+                      child: const Center(child: Text('Tidak ada Gambar')),
+                    );
+                  },
                 ),
               ),
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
-                  ),
-                  gradient: LinearGradient(
-                    colors: [Colors.black.withOpacity(0.8), Colors.transparent],
-                    begin: Alignment.bottomCenter,
-                    end: Alignment.topCenter,
-                  ),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        )),
-                    Text(address,
-                        style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 12,
-                        )),
-                  ],
-                ),
+              title: Text(
+                name,
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
-            ],
-          ),
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: Row(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    description,
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  flex: 1,
-                  child: SizedBox(
-                    height: 100,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: GoogleMap(
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(latitude, longitude),
-                          zoom: 14,
-                        ),
-                        markers: {
-                          Marker(
-                            markerId: MarkerId(name),
-                            position: LatLng(latitude, longitude),
-                            infoWindow: InfoWindow(title: name),
-                          ),
-                        },
-                        zoomControlsEnabled: false,
-                        scrollGesturesEnabled: false,
-                        tiltGesturesEnabled: false,
-                        rotateGesturesEnabled: false,
-                        onMapCreated: (controller) {},
-                      ),
+              subtitle: const Text('Ketuk untuk melihat di peta'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MapScreen(
+                      museumName: name,
+                      latitude: latitude,
+                      longitude: longitude,
                     ),
                   ),
-                )
-              ],
+                );
+              },
             ),
-          ),
-        ],
+            SizedBox(
+              height: 200,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(latitude, longitude),
+                    zoom: 15,
+                  ),
+                  markers: {
+                    Marker(
+                      markerId: MarkerId(name),
+                      position: LatLng(latitude, longitude),
+                      infoWindow: InfoWindow(title: name),
+                    ),
+                  },
+                  zoomControlsEnabled: false,
+                  scrollGesturesEnabled: false,
+                  tiltGesturesEnabled: false,
+                  rotateGesturesEnabled: false,
+                  onMapCreated: (controller) {},
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

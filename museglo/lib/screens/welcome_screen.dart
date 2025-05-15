@@ -20,10 +20,10 @@ class WelcomeScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: Colors.white12,
                   borderRadius: BorderRadius.circular(12),
-                  image: const DecorationImage(
-                    image: AssetImage("assets/logo.png"), 
-                    fit: BoxFit.cover,
-                  ),
+                  // image: const DecorationImage(
+                  //   image: AssetImage("assets/logo.png"), 
+                  //   fit: BoxFit.cover,
+                  // ),
                 ),
               ),
             ),
