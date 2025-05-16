@@ -64,7 +64,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       borderRadius: BorderRadius.circular(12),
                       // LOGO GANTI
                       image: const DecorationImage(
-                        image: AssetImage("assets/logo.png"),
+                        image: AssetImage("assets/logo.jpg"),
                         fit: BoxFit.cover,
                       ),
                     ),

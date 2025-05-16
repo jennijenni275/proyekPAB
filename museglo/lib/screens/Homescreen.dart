@@ -50,65 +50,22 @@ class _HomeScreenState extends State<HomeScreen> {
       body: FutureBuilder<DatabaseEvent>(
         future: FirebaseDatabase.instance.ref('museums').once(),
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(
-              child: Text('Terjadi kesalahan: Tidak dapat memuat data.'),
-            );
-          }
-
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-
-          if (!snapshot.hasData || snapshot.data?.snapshot.value == null) {
-            return const Center(
-              child: Text('Tidak ada museum yang ditemukan.'),
-            );
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          if (!snapshot.hasData || snapshot.data!.snapshot.value == null) {
+            return const Center(child: Text('Tidak ada data museum'));
           }
 
-          final data = Map<String, dynamic>.from(
-            snapshot.data!.snapshot.value as Map,
-          );
-          final museumList = data.entries.toList();
+          // Kalau sampai sini, data sudah ada
+          final data = snapshot.data!.snapshot.value;
 
-          return ListView.builder(
-            itemCount: museumList.length,
-            itemBuilder: (context, index) {
-              final museumData = Map<String, dynamic>.from(
-                museumList[index].value,
-              );
-              final name = museumData['name'] ?? 'Museum Tidak Dikenal';
-              final description =
-                  museumData['description'] ?? 'Deskripsi tidak ada';
-              final address = museumData['address'] ?? 'Alamat tidak ditemukan';
-              final imageUrl =
-                  museumData['image_url'] ??
-                  'https://placehold.co/200x150/EEE/31343C?text=Gambar';
-              final mapUrl = museumData['map_url'] ?? '';
-              final collections =
-                  (museumData['collections'] as List<dynamic>?)
-                      ?.map((item) => Map<String, dynamic>.from(item))
-                      .toList() ??
-                  [];
-              final artworks = collections.length;
-
-              return MuseumCard(
-                name: name,
-                description: description,
-                address: address,
-                artworks: artworks,
-                imageUrl: imageUrl,
-                mapUrl: mapUrl,
-                onTapDetail: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => DetailScreen(collections: collections),
-                    ),
-                  );
-                },
-              );
-            },
+          return SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Text(data.toString(), style: const TextStyle(fontSize: 14)),
           );
         },
       ),
