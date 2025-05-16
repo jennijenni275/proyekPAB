@@ -1,0 +1,316 @@
+{
+  "museums": {
+    "WallaceCollection": {
+      "name": "The Wallace Collection",
+      "address": "Hertford House, Manchester Square, London W1U 3BN, UK",
+      "description": "Museum seni dengan koleksi seni dekoratif, lukisan Rococo, dan senjata Eropa.",
+      "map_url": "https://goo.gl/maps/1uYf3z1y1Y12",
+      "open_hours": {
+        "Monday": "10:00 - 17:00",
+        "Tuesday": "10:00 - 17:00",
+        "Wednesday": "10:00 - 17:00",
+        "Thursday": "10:00 - 17:00",
+        "Friday": "10:00 - 17:00",
+        "Saturday": "10:00 - 17:00",
+        "Sunday": "10:00 - 17:00"
+      },
+      "collections": [
+        {
+          "title": "The Swing", "artist": "Jean-Honoré Fragonard",
+          "year": "1767",
+          "description": "Lukisan Rococo karya Jean-Honoré Fragonard yang menggambarkan wanita muda di atas ayunan.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f6/Fragonard%2C_The_Swing.jpg"
+        },
+        {
+          "title": "The Laughing Cavalier",
+          "artist": "Frans Hals",
+          "year": "1624",
+          "description": "Potret pria abad ke-17 karya Frans Hals dengan ekspresi ceria dan gaya busana flamboyan.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Frans_Hals_-_The_Laughing_Cavalier.jpg"
+        },
+        {
+          "title": "French Furniture",
+          "artist": "Unknown",
+          "year": "18th century",
+          "description": "Perabotan mewah era Louis XV dan Louis XVI.",
+          "image_url": "https://www.wallacecollection.org/media/1565/furniture.jpg"
+        },
+        {
+          "title": "Arms and Armour",
+          "artist": "Various",
+          "year": "15th–18th century",
+          "description": "Senjata dan zirah dari Eropa, India, dan Timur Tengah.",
+          "image_url": "https://www.wallacecollection.org/media/1563/armsandarmour.jpg"
+        },
+        {
+          "title": "Sèvres Porcelain",
+          "artist": "Sèvres Porcelain Manufactory",
+          "year": "1740s–1790s",
+          "description": "Keramik elegan dari Prancis abad ke-18.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Sevres_porcelain_-_Musee_du_Louvre.jpg"
+        }
+      ]
+    },
+    "MuseumNasionalIndonesia": {
+      "name": "Museum Nasional Indonesia",
+      "address": "Jl. Medan Merdeka Barat No.12, Jakarta Pusat, Indonesia",
+      "description": "Museum arkeologi dan sejarah yang menyimpan koleksi artefak Indonesia dari masa Hindu-Buddha hingga kolonial.",
+      "map_url": "https://goo.gl/maps/2v1k3z1y1Y12",
+      "note": "Sementara ditutup untuk renovasi hingga Oktober 2024 akibat kebakaran.",
+      "open_hours": {
+        "Monday": "Tutup",
+        "Tuesday": "08:00 - 16:00",
+        "Wednesday": "08:00 - 16:00",
+        "Thursday": "08:00 - 16:00",
+        "Friday": "08:00 - 16:00",
+        "Saturday": "08:00 - 16:00",
+        "Sunday": "08:00 - 16:00"
+      },
+      "collections": [
+        {
+          "title": "Arca Hindu-Buddha",
+          "artist": "Unknown (Pengrajin kerajaan)",
+          "year": "800–1300 AD",
+          "description": "Patung kuno dari abad ke-8 hingga ke-14 yang berasal dari Jawa dan Sumatra.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/36/National_Museum_of_Indonesia_Hindu-Buddha_statue.jpg"
+        },
+        {
+          "title": "Keramik Kuno",
+          "artist": "Berbagai dinasti Asia Timur",
+          "year": "10th–18th century",
+          "description": "Keramik dari Cina, Thailand, dan Vietnam.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/26/National_Museum_of_Indonesia_Ceramics.jpg"
+        },
+        {
+          "title": "Topeng Tradisional",
+          "artist": "Pengrajin Lokal",
+          "year": "Unknown",
+          "description": "Topeng budaya dari berbagai daerah Indonesia.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/99/Museum_Nasional_mask_collection.jpg"
+        },
+        {
+          "title": "Manuskrip Kuno",
+          "artist": "Penulis istana dan ulama",
+          "year": "12th–19th century",
+          "description": "Naskah berbahasa Jawa Kuno, Arab Melayu, dan Sanskerta.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/30/National_Museum_of_Indonesia_Manuscripts.jpg"
+        },
+        {
+          "title": "Perhiasan Emas",
+          "artist": "Pandai emas tradisional",
+          "year": "8th–14th century",
+          "description": "Perhiasan emas dan perak dari kerajaan Nusantara.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/15/National_Museum_of_Indonesia_Gold.jpg"
+        }
+      ]
+    },
+    "MuseumSultanMahmudBadaruddinII": {
+      "name": "Museum Sultan Mahmud Badaruddin II",
+      "address": "Jl. Sultan Mahmud Badaruddin, 19 Ilir, Bukit Kecil, Palembang, Indonesia",
+      "description": "Museum sejarah yang menyimpan artefak dan informasi tentang Kesultanan Palembang serta budaya Sumatera Selatan.",
+      "map_url": "https://goo.gl/maps/NdNm9vWc3JY6wB1g8",
+      "open_hours": {
+        "Monday": "Tutup",
+        "Tuesday": "08:00 - 15:00",
+        "Wednesday": "08:00 - 15:00",
+        "Thursday": "08:00 - 15:00",
+        "Friday": "08:00 - 15:00",
+        "Saturday": "08:00 - 15:00",
+        "Sunday": "08:00 - 15:00"
+      },
+      "collections": [
+        {
+        "title": "Keris Palembang",
+        "description": "Koleksi keris tradisional dari zaman Kesultanan Palembang.",
+        "artist": "Pandai besi lokal",
+        "year": "18th century",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f5/Keris_collection.jpg"
+      },
+      {
+        "title": "Tekstil Songket",
+        "description": "Kain songket tradisional dengan benang emas.",
+        "artist": "Pengrajin songket Palembang",
+        "year": "19th–20th century",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6b/Songket.jpg"
+      },
+      {
+        "title": "Miniatur Rumah Limas",
+        "description": "Model rumah tradisional Sumatra Selatan.",
+        "artist": "Seniman lokal",
+        "year": "20th century",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Rumah_Limas.jpg"
+      },
+      {
+        "title": "Lukisan Sultan Mahmud Badaruddin II",
+        "description": "Potret penguasa Kesultanan Palembang awal abad ke-19.",
+        "artist": "Pelukis istana",
+        "year": "1800s",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Sultan_Mahmud_Badaruddin_II.jpg"
+      },
+      {
+        "title": "Artefak Perdagangan",
+        "description": "Barang-barang peninggalan dari masa kejayaan perdagangan sungai Musi.",
+        "artist": "Unknown",
+        "year": "17th–19th century",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d8/Musi_trade_artifacts.jpg"
+      }
+      ]
+    },
+    "MuseumBankIndonesia": {
+      "name": "Museum Bank Indonesia",
+      "address": "Jl. Pintu Besar Utara No.3, Jakarta Barat, Indonesia",
+      "description": "Museum interaktif tentang sejarah perbankan dan ekonomi di Indonesia yang dikelola oleh Bank Indonesia.",
+      "map_url": "https://goo.gl/maps/7tp3yq4bRRuKQqtn9",
+      "open_hours": {
+        "Monday": "Tutup",
+        "Tuesday": "08:00 - 16:00",
+        "Wednesday": "08:00 - 16:00",
+        "Thursday": "08:00 - 16:00",
+        "Friday": "08:00 - 16:00",
+        "Saturday": "08:00 - 16:00",
+        "Sunday": "08:00 - 16:00"
+      },
+      "collections": [
+         {
+        "title": "Uang Kertas Hindia Belanda",
+        "description": "Uang kertas zaman kolonial dari De Javasche Bank.",
+        "artist": "De Javasche Bank",
+        "year": "1828–1942",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b7/Netherlands_Indies_Banknote.jpg"
+      },
+      {
+        "title": "Mesin Hitung Kuno",
+        "description": "Mesin kalkulasi dan akuntansi dari era awal perbankan.",
+        "artist": "Burroughs Company",
+        "year": "1920s",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d4/Old_Calculating_Machine.jpg"
+      },
+      {
+        "title": "Seragam Pegawai Bank Tempo Dulu",
+        "description": "Pakaian resmi karyawan bank era kolonial.",
+        "artist": "Desainer kolonial",
+        "year": "1930s–1940s",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c5/Old_Bank_Uniform.jpg"
+      },
+      {
+        "title": "Perhiasan Emas sebagai Simpanan",
+        "description": "Contoh emas batangan dan logam mulia sebagai alat simpanan.",
+        "artist": "Pengrajin logam mulia",
+        "year": "20th century",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/5f/Gold_bars.jpg"
+      },
+      {
+        "title": "Sistem Interaktif Sejarah Moneter",
+        "description": "Instalasi digital interaktif yang menjelaskan evolusi sistem keuangan Indonesia.",
+        "artist": "Tim edukasi BI",
+        "year": "2010s",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Bank_Indonesia_Museum_Interactive.jpg"
+      }
+      ]
+    },
+  "LouvreMuseum": {
+    "name": "The Louvre Museum",
+    "address": "Rue de Rivoli, 75001 Paris, France",
+    "description": "Museum seni terbesar dan paling banyak dikunjungi di dunia, terkenal dengan koleksi seni klasik dan modern.",
+    "map_url": "https://goo.gl/maps/9oNNYwztowrZ3JXZ6",
+    "open_hours": {
+      "Monday": "09:00 - 18:00",
+      "Tuesday": "Closed",
+      "Wednesday": "09:00 - 21:45",
+      "Thursday": "09:00 - 18:00",
+      "Friday": "09:00 - 21:45",
+      "Saturday": "09:00 - 18:00",
+      "Sunday": "09:00 - 18:00"
+    },
+    "collections": [
+      {
+        "title": "Mona Lisa",
+        "description": "Potret terkenal karya Leonardo da Vinci, dikenal dengan senyum misteriusnya.",
+        "artist": "Leonardo da Vinci",
+        "year": "1503–1506",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg"
+      },
+      {
+        "title": "Venus de Milo",
+        "description": "Patung Yunani kuno yang menggambarkan dewi cinta dan kecantikan, Aphrodite.",
+        "artist": "Alexandros of Antioch",
+        "year": "130–100 BC",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Venus_de_Milo_Louvre_Ma399_n4.jpg"
+      },
+      {
+        "title": "Liberty Leading the People",
+        "description": "Lukisan alegoris Revolusi Prancis oleh Delacroix.",
+        "artist": "Eugène Delacroix",
+        "year": "1830",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Eug%C3%A8ne_Delacroix_-_La_libert%C3%A9_guidant_le_peuple.jpg"
+      },
+      {
+        "title": "The Coronation of Napoleon",
+        "description": "Lukisan monumental tentang penobatan Napoleon Bonaparte.",
+        "artist": "Jacques-Louis David",
+        "year": "1805–1807",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b0/Jacques-Louis_David_-_The_Coronation_of_Napoleon_%281805-1807%29.jpg"
+      },
+      {
+        "title": "The Wedding at Cana",
+        "description": "Lukisan besar yang menggambarkan mukjizat Yesus mengubah air menjadi anggur.",
+        "artist": "Paolo Veronese",
+        "year": "1563",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/21/Paolo_Veronese_001.jpg"
+      }
+    ]
+  },
+  "BritishMuseum": {
+    "name": "The British Museum",
+    "address": "Great Russell St, London WC1B 3DG, United Kingdom",
+    "description": "Museum nasional Inggris yang menyimpan koleksi artefak dari seluruh dunia, termasuk Mesir Kuno, Yunani, dan Asia.",
+    "map_url": "https://goo.gl/maps/UqvEvst1DHpSg2Qq9",
+    "open_hours": {
+      "Monday": "10:00 - 17:00",
+      "Tuesday": "10:00 - 17:00",
+      "Wednesday": "10:00 - 17:00",
+      "Thursday": "10:00 - 17:00",
+      "Friday": "10:00 - 20:30",
+      "Saturday": "10:00 - 17:00",
+      "Sunday": "10:00 - 17:00"
+    },
+    "collections": [
+      {
+        "title": "Rosetta Stone",
+        "description": "Artefak batu yang menjadi kunci penguraian hieroglif Mesir.",
+        "artist": "Unknown",
+        "year": "196 BC",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Rosetta_Stone.JPG"
+      },
+      {
+        "title": "Parthenon Marbles",
+        "description": "Relief patung dari kuil Parthenon di Athena.",
+        "artist": "Phidias dan muridnya",
+        "year": "447–438 BC",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/09/Elgin_Marbles_London_2007_1.jpg"
+      },
+      {
+        "title": "Mummy of Katebet",
+        "description": "Mumi wanita bangsawan Mesir dari periode Kerajaan Baru.",
+        "artist": "Pengrajin Mesir Kuno",
+        "year": "1300 BC",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/06/Mummy_of_Katebet_British_Museum.jpg"
+      },
+      {
+        "title": "Lewis Chessmen",
+        "description": "Bidak catur abad pertengahan yang diukir dari gading paus.",
+        "artist": "Pengrajin Norse",
+        "year": "12th century",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/0c/Lewis_chessmen_BM.jpg"
+      },
+      {
+        "title": "Assyrian Lion Hunt Reliefs",
+        "description": "Relief dari istana Asyur yang menggambarkan raja berburu singa.",
+        "artist": "Seniman Asyur",
+        "year": "645 BC",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Assyrian_lion_hunt_reliefs_British_Museum.jpg"
+      }
+    ]
+  }
+  }
+}
