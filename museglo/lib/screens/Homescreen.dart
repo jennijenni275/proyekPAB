@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:museglo/screens/detail_screen.dart';
 import 'package:museglo/screens/post_screen.dart';
 import 'package:museglo/screens/profile_screen.dart';
 import 'package:museglo/screens/search_screen.dart';
@@ -60,12 +59,31 @@ class _HomeScreenState extends State<HomeScreen> {
             return const Center(child: Text('Tidak ada data museum'));
           }
 
-          // Kalau sampai sini, data sudah ada
-          final data = snapshot.data!.snapshot.value;
+          final data = snapshot.data!.snapshot.value as Map;
 
-          return SingleChildScrollView(
+          return ListView(
             padding: const EdgeInsets.all(16),
-            child: Text(data.toString(), style: const TextStyle(fontSize: 14)),
+            children: data.entries.map((entry) {
+              final museum = entry.value as Map;
+
+              final collectionsMap = museum['collections'] as Map?;
+              final collections = collectionsMap?.values.toList() ?? [];
+
+              return MuseumCard(
+                name: museum['name'] ?? '',
+                description: museum['description'] ?? '',
+                address: museum['address'] ?? '',
+                artworks: collections.length,
+                imageUrl: collections.isNotEmpty
+                    ? collections[0]['image_url'] ?? ''
+                    : '',
+                mapUrl: museum['map_url'] ?? '',
+                onTapDetail: () {
+                  // Nanti bisa diarahkan ke detail screen
+                  debugPrint("Klik museum: ${museum['name']}");
+                },
+              );
+            }).toList(),
           );
         },
       ),
@@ -106,9 +124,9 @@ class MuseumCard extends StatelessWidget {
 
   Future<void> _launchMapUrl(BuildContext context) async {
     if (mapUrl.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Link peta tidak tersedia')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Link peta tidak tersedia')),
+      );
       return;
     }
 
@@ -116,9 +134,9 @@ class MuseumCard extends StatelessWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Tidak dapat membuka peta')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak dapat membuka peta')),
+      );
     }
   }
 

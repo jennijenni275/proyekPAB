@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class PostImagePage extends StatefulWidget {
+  const PostImagePage({super.key});
+
   @override
   _PostImagePageState createState() => _PostImagePageState();
 }

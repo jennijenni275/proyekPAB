@@ -4,6 +4,8 @@ class SearchingPage extends StatelessWidget {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _exhibitController = TextEditingController();
 
+  SearchingPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

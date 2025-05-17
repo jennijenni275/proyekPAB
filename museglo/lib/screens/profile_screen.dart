@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:museglo/screens/detail_profile_screen.dart';
+import 'package:museglo/screens/ticket_page_screen.dart';
+import 'package:museglo/screens/favorite_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -14,11 +17,11 @@ class ProfileScreen extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             color: Colors.grey[700],
             child: Column(
-              children: [
-                const Icon(Icons.account_circle, size: 80, color: Colors.white),
-                const SizedBox(height: 8),
-                const Text('User', style: TextStyle(color: Colors.white, fontSize: 20)),
-                const Text('User@gmail.com', style: TextStyle(color: Colors.white70, fontSize: 16)),
+              children: const [
+                Icon(Icons.account_circle, size: 80, color: Colors.white),
+                SizedBox(height: 8),
+                Text('User', style: TextStyle(color: Colors.white, fontSize: 20)),
+                Text('User@gmail.com', style: TextStyle(color: Colors.white70, fontSize: 16)),
               ],
             ),
           ),
@@ -26,14 +29,32 @@ class ProfileScreen extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.perm_identity, color: Colors.white),
             title: const Text('Identitas', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const DetailProfileScreen()),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.confirmation_num, color: Colors.white),
             title: const Text('My Ticket', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TicketScreen()),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(Icons.star_border, color: Colors.white),
             title: const Text('Favorites', style: TextStyle(color: Colors.white)),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const FavoriteScreen()),
+              );
+            },
           ),
           const Spacer(),
           ElevatedButton(

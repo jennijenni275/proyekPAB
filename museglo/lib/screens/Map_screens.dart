@@ -7,11 +7,11 @@ class MapScreen extends StatefulWidget {
   final double longitude;
 
   const MapScreen({
-    Key? key,
+    super.key,
     required this.museumName,
     required this.latitude,
     required this.longitude,
-  }) : super(key: key);
+  });
 
   @override
   State<MapScreen> createState() => _MapScreenState();

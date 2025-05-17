@@ -17,8 +17,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
+  final bool _isPasswordVisible = false;
+  final bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -78,6 +78,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _signUp() async {
     if (!_formKey.currentState!.validate()) return;
+    if (_passwordController.text != _confirmPasswordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Password and Confirm Password do not match.'),
+      ));
+      return;
+    }
+
     setState(() => _isLoading = true);
 
     try {
@@ -85,6 +92,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
         email: _emailController.text.trim(),
         password: _passwordController.text,
       );
+
+      await userCredential.user!.updateDisplayName(_fullNameController.text.trim());
 
       await FirebaseFirestore.instance.collection('users').doc(userCredential.user!.uid).set({
         'fullName': _fullNameController.text.trim(),

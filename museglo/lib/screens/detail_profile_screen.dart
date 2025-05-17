@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class DetailProfileScreen extends StatelessWidget {
   const DetailProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detail Profil'),
@@ -16,7 +19,7 @@ class DetailProfileScreen extends StatelessWidget {
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background.png'), // Sesuaikan path background
+                image: AssetImage('assets/background.png'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -26,9 +29,18 @@ class DetailProfileScreen extends StatelessWidget {
             children: [
               const Icon(Icons.account_circle, size: 100, color: Colors.grey),
               const SizedBox(height: 16),
-              DetailProfileField(label: 'Username', value: 'User'),
-              DetailProfileField(label: 'Email', value: 'User@gmail.com'),
-              DetailProfileField(label: 'Phone', value: '08*****'),
+              DetailProfileField(
+                label: 'Username',
+                value: user?.displayName ?? 'Tidak diketahui',
+              ),
+              DetailProfileField(
+                label: 'Email',
+                value: user?.email ?? 'Tidak diketahui',
+              ),
+              DetailProfileField(
+                label: 'Phone',
+                value: user?.phoneNumber ?? 'Belum ada',
+              ),
             ],
           ),
         ],
@@ -49,7 +61,11 @@ class DetailProfileField extends StatelessWidget {
   final String label;
   final String value;
 
-  const DetailProfileField({required this.label, required this.value, super.key});
+  const DetailProfileField({
+    required this.label,
+    required this.value,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
