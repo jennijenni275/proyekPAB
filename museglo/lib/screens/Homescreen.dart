@@ -5,7 +5,7 @@ import 'package:museglo/screens/post_screen.dart';
 import 'package:museglo/screens/profile_screen.dart';
 import 'package:museglo/screens/search_screen.dart';
 import 'package:museglo/screens/detail_screen.dart';
-import 'package:museglo/model/MuseumModel.dart'; // Pastikan model sudah ada
+import 'package:museglo/model/MuseumModel.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
