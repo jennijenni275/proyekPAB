@@ -34,9 +34,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '248437693697',
     projectId: 'museglo-app',
     authDomain: 'museglo-app.firebaseapp.com',
+    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com',
     storageBucket: 'museglo-app.firebasestorage.app',
     measurementId: 'G-J0DQ6JF3QP',
-    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com/',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
@@ -44,8 +44,8 @@ class DefaultFirebaseOptions {
     appId: '1:248437693697:android:12bf3b53a42a1c60c2cf00',
     messagingSenderId: '248437693697',
     projectId: 'museglo-app',
+    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com',
     storageBucket: 'museglo-app.firebasestorage.app',
-    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com/',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
@@ -53,9 +53,9 @@ class DefaultFirebaseOptions {
     appId: '1:248437693697:ios:deca3f2d653276a4c2cf00',
     messagingSenderId: '248437693697',
     projectId: 'museglo-app',
+    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com',
     storageBucket: 'museglo-app.firebasestorage.app',
     iosBundleId: 'com.example.museglo',
-    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com/',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -63,9 +63,9 @@ class DefaultFirebaseOptions {
     appId: '1:248437693697:ios:deca3f2d653276a4c2cf00',
     messagingSenderId: '248437693697',
     projectId: 'museglo-app',
+    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com',
     storageBucket: 'museglo-app.firebasestorage.app',
     iosBundleId: 'com.example.museglo',
-    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com/',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
@@ -74,8 +74,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '248437693697',
     projectId: 'museglo-app',
     authDomain: 'museglo-app.firebaseapp.com',
+    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com',
     storageBucket: 'museglo-app.firebasestorage.app',
     measurementId: 'G-B04QFMTRBG',
-    databaseURL: 'https://museglo-app-default-rtdb.firebaseio.com/',
   );
+
 }
