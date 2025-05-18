@@ -65,46 +65,59 @@ class _HomeScreenState extends State<HomeScreen> {
           List<Museum> museums = [];
 
           if (raw is List) {
-            museums = raw
-                .where((e) => e != null)
-                .map((e) => Museum.fromMap(Map<String, dynamic>.from(e as Map)))
-                .toList();
+            museums =
+                raw
+                    .where((e) => e != null)
+                    .map(
+                      (e) =>
+                          Museum.fromMap(Map<String, dynamic>.from(e as Map)),
+                    )
+                    .toList();
           } else if (raw is Map) {
-            museums = (raw as Map).entries
-                .map((entry) => Museum.fromMap(Map<String, dynamic>.from(entry.value)))
-                .toList();
+            museums =
+                (raw as Map).entries
+                    .map(
+                      (entry) => Museum.fromMap(
+                        Map<String, dynamic>.from(entry.value),
+                      ),
+                    )
+                    .toList();
           }
 
           return ListView(
             padding: const EdgeInsets.all(16),
-            children: museums.map((museum) {
-              return MuseumCard(
-                name: museum.name,
-                description: museum.collections.isNotEmpty
-                    ? museum.collections[0].description
-                    : 'Deskripsi tidak tersedia',
-                address: museum.location,
-                artworks: museum.collections.length,
-                imageUrl: museum.collections.isNotEmpty
-                    ? museum.collections[0].imageUrl
-                    : '',
-                mapUrl: museum.mapsUrl,
-                onTapDetail: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => DetailScreen(museum: museum),
-                    ),
+            children:
+                museums.map((museum) {
+                  return MuseumCard(
+                    name: museum.name,
+                    description:
+                        museum.collections.isNotEmpty
+                            ? museum.collections[0].description
+                            : 'Deskripsi tidak tersedia',
+                    address: museum.location,
+                    artworks: museum.collections.length,
+                    imageUrl:
+                        museum.collections.isNotEmpty
+                            ? museum.collections[0].imageUrl
+                            : '',
+                    mapUrl: museum.mapsUrl,
+                    onTapDetail: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DetailScreen(museum: museum),
+                        ),
+                      );
+                    },
                   );
-                },
-              );
-            }).toList(),
+                }).toList(),
           );
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onBottomNavTapped,
+
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.grey,
@@ -141,9 +154,9 @@ class MuseumCard extends StatelessWidget {
 
   Future<void> _launchMapUrl(BuildContext context) async {
     if (mapUrl.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Link peta tidak tersedia')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Link peta tidak tersedia')));
       return;
     }
 
@@ -151,9 +164,9 @@ class MuseumCard extends StatelessWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tidak dapat membuka peta')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Tidak dapat membuka peta')));
     }
   }
 
