@@ -22,6 +22,16 @@ class Collection {
       imageUrl: map['image_url'] ?? '',
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'title': title,
+      'artist': artist,
+      'year': year,
+      'description': description,
+      'image_url': imageUrl,
+    };
+  }
 }
 
 class Museum {
@@ -41,11 +51,11 @@ class Museum {
 
   factory Museum.fromMap(Map<String, dynamic> map) {
     var collectionsFromMap = <Collection>[];
-    if (map['collections'] != null) {
-      collectionsFromMap =
-          List<Map<String, dynamic>>.from(
-            map['collections'],
-          ).map((item) => Collection.fromMap(item)).toList();
+    if (map['collections'] != null && map['collections'] is Map<String, dynamic>) {
+      collectionsFromMap = (map['collections'] as Map<String, dynamic>)
+          .values
+          .map((item) => Collection.fromMap(item as Map<String, dynamic>))
+          .toList();
     }
 
     return Museum(
@@ -55,5 +65,15 @@ class Museum {
       openHours: map['open_hours'] ?? '',
       collections: collectionsFromMap,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'location': location,
+      'maps_url': mapsUrl,
+      'open_hours': openHours,
+      'collections': collections.map((c) => c.toMap()).toList(),
+    };
   }
 }

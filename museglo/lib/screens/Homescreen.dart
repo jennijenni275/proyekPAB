@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-} //harusnya udah
+}
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
@@ -61,39 +61,44 @@ class _HomeScreenState extends State<HomeScreen> {
             return const Center(child: Text('Tidak ada data museum'));
           }
 
-          final data = snapshot.data!.snapshot.value as Map;
+          final raw = snapshot.data!.snapshot.value;
+          List<Museum> museums = [];
+
+          if (raw is List) {
+            museums = raw
+                .where((e) => e != null)
+                .map((e) => Museum.fromMap(Map<String, dynamic>.from(e as Map)))
+                .toList();
+          } else if (raw is Map) {
+            museums = (raw as Map).entries
+                .map((entry) => Museum.fromMap(Map<String, dynamic>.from(entry.value)))
+                .toList();
+          }
 
           return ListView(
             padding: const EdgeInsets.all(16),
-            children:
-                data.entries.map((entry) {
-                  final museum = Museum.fromMap(
-                    Map<String, dynamic>.from(entry.value),
+            children: museums.map((museum) {
+              return MuseumCard(
+                name: museum.name,
+                description: museum.collections.isNotEmpty
+                    ? museum.collections[0].description
+                    : 'Deskripsi tidak tersedia',
+                address: museum.location,
+                artworks: museum.collections.length,
+                imageUrl: museum.collections.isNotEmpty
+                    ? museum.collections[0].imageUrl
+                    : '',
+                mapUrl: museum.mapsUrl,
+                onTapDetail: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => DetailScreen(museum: museum),
+                    ),
                   );
-
-                  return MuseumCard(
-                    name: museum.name,
-                    description:
-                        museum.collections.isNotEmpty
-                            ? museum.collections[0].description
-                            : 'Deskripsi tidak tersedia',
-                    address: museum.location,
-                    artworks: museum.collections.length,
-                    imageUrl:
-                        museum.collections.isNotEmpty
-                            ? museum.collections[0].imageUrl
-                            : '',
-                    mapUrl: museum.mapsUrl,
-                    onTapDetail: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => DetailScreen(museum: museum),
-                        ),
-                      );
-                    },
-                  );
-                }).toList(),
+                },
+              );
+            }).toList(),
           );
         },
       ),
@@ -101,6 +106,8 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedIndex,
         onTap: _onBottomNavTapped,
         type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
@@ -134,9 +141,9 @@ class MuseumCard extends StatelessWidget {
 
   Future<void> _launchMapUrl(BuildContext context) async {
     if (mapUrl.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Link peta tidak tersedia')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Link peta tidak tersedia')),
+      );
       return;
     }
 
@@ -144,9 +151,9 @@ class MuseumCard extends StatelessWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Tidak dapat membuka peta')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Tidak dapat membuka peta')),
+      );
     }
   }
 
