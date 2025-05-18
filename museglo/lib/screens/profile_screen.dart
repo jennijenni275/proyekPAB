@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:museglo/screens/favorite_screen.dart';
 import 'package:museglo/screens/ticket_page_screen.dart';
 
@@ -10,8 +15,42 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final TextEditingController _usernameController = TextEditingController(text: 'User');
-  final TextEditingController _phoneController = TextEditingController(text: '08*****');
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  String email = '';
+  File? _profileImage;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  void fetchUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final data = doc.data();
+
+      if (data != null) {
+        setState(() {
+          _usernameController.text = data['fullName'] ?? 'User';
+          email = data['email'] ?? user.email ?? '';
+          _phoneController.text = data['phone'] ?? '08*****';
+        });
+      }
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+    if (picked != null) {
+      setState(() {
+        _profileImage = File(picked.path);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +67,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
       body: Stack(
         children: [
-          // Background image
           SizedBox(
             height: screenHeight,
             width: double.infinity,
@@ -37,24 +75,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fit: BoxFit.cover,
             ),
           ),
-
-          // Optional dark overlay
           Container(
             height: screenHeight,
             color: Colors.black.withOpacity(0.3),
           ),
-
-          // Content
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 120, bottom: 40),
             child: Column(
               children: [
-                const Icon(
-                  Icons.account_circle,
-                  size: 100,
-                  color: Colors.white,
-                ),
                 const SizedBox(height: 16),
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CircleAvatar(
+                      radius: 70,
+                      backgroundImage: _profileImage != null
+                          ? FileImage(_profileImage!)
+                          : const AssetImage('assets/profile.jpg') as ImageProvider,
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 4,
+                      child: InkWell(
+                        onTap: _pickImage,
+                        child: CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.white,
+                          child: const Icon(Icons.camera_alt, size: 20, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(20),
@@ -67,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       buildEditableField('Username', _usernameController),
                       const SizedBox(height: 10),
-                      buildInfoField('Email', 'User@gmail.com'),
+                      buildInfoField('Email', email),
                       const SizedBox(height: 10),
                       buildEditableField('Phone', _phoneController),
                       const SizedBox(height: 30),
@@ -94,11 +147,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 20),
                       Center(
                         child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context); // Logout sementara
+                          onPressed: () async {
+                            await FirebaseAuth.instance.signOut();
+                            Navigator.pop(context); // Logout
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.grey[700],
+                            backgroundColor: const Color.fromARGB(255, 174, 139, 49),
                             padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                           ),
                           child: const Text('Log Out', style: TextStyle(color: Colors.white)),
@@ -119,12 +173,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
         const SizedBox(height: 4),
         TextField(
           controller: controller,
-          style: const TextStyle(color: Colors.black), // Teks hitam
+          style: const TextStyle(color: Colors.black),
           decoration: InputDecoration(
             filled: true,
             fillColor: Colors.white,
@@ -143,8 +196,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
         const SizedBox(height: 4),
         Container(
           width: double.infinity,
