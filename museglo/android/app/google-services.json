@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "248437693697",
+    "firebase_url": "https://museglo-app-default-rtdb.firebaseio.com",
     "project_id": "museglo-app",
     "storage_bucket": "museglo-app.firebasestorage.app"
   },
