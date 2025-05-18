@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:museglo/screens/welcome_screen.dart';
-import 'package:shimmer/main.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -20,7 +19,7 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MuseGlo',
       theme: ThemeData.dark(),
-      home: WelcomeScreen(),
+      home: const WelcomeScreen(),
     );
   }
 }
