@@ -27,11 +27,11 @@ android {
         applicationId = "com.example.museglo"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-<<<<<<< Updated upstream
+<<<<<<< HEAD
         minSdk = 23
 =======
+>>>>>>> 0323891053fa07a36762db5198662557cf48db98
         minSdk =23
->>>>>>> Stashed changes
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName

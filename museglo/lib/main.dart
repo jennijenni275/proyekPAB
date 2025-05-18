@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-<<<<<<< Updated upstream
 import 'package:firebase_core/firebase_core.dart';
 import 'package:museglo/screens/welcome_screen.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-=======
-import 'package:museglo/screens/Homescreen.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // Pastikan file ini ada
+<<<<<<< HEAD
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  // CEK DULU SEBELUM INITIALIZE
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  }
+
+=======
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
->>>>>>> Stashed changes
+>>>>>>> 0323891053fa07a36762db5198662557cf48db98
   runApp(const MainApp());
 }
 
@@ -30,7 +31,11 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MuseGlo',
       theme: ThemeData.dark(),
-      home: WelcomeScreen(), 
+      home: WelcomeScreen(),
+<<<<<<< HEAD
     );
+=======
+   );
+>>>>>>> 0323891053fa07a36762db5198662557cf48db98
   }
 }
