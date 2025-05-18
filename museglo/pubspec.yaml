@@ -32,3 +32,4 @@ dev_dependencies:
 flutter:
   assets:
     - assets/logo.jpg
+    - assets/background.jpg

@@ -17,8 +17,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _confirmPasswordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
-  final bool _isPasswordVisible = false;
-  final bool _isConfirmPasswordVisible = false;
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +38,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               children: [
                 _buildTextField('Full Name', _fullNameController, Icons.person, false),
                 const SizedBox(height: 16.0),
-                _buildTextField('Email', _emailController, Icons.email, false),
+                _buildTextField('Email', _emailController, Icons.person, false),
                 const SizedBox(height: 16.0),
                 _buildTextField('Password', _passwordController, Icons.lock, true),
                 const SizedBox(height: 16.0),
-                _buildTextField('Confirm Password', _confirmPasswordController, Icons.lock_outline, true),
+                _buildTextField('Confirm Password', _confirmPasswordController, Icons.lock, true, true),
                 const SizedBox(height: 16.0),
                 _isLoading
                     ? const CircularProgressIndicator()
@@ -59,18 +59,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Widget _buildTextField(String label, TextEditingController controller, IconData icon, bool isPassword) {
+  Widget _buildTextField(String label, TextEditingController controller, IconData icon, bool isPassword, [bool isConfirm = false]) {
     return TextFormField(
       controller: controller,
-      obscureText: isPassword ? !_isPasswordVisible : false,
+      obscureText: isPassword ? (isConfirm ? !_isConfirmPasswordVisible : !_isPasswordVisible) : false,
       style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.grey[800],
         labelText: label,
         labelStyle: const TextStyle(color: Colors.white),
-        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.white)),
+        border: const OutlineInputBorder(),
         prefixIcon: Icon(icon, color: Colors.white),
+        suffixIcon: isPassword
+            ? IconButton(
+                icon: Icon(
+                  (isConfirm ? _isConfirmPasswordVisible : _isPasswordVisible) ? Icons.visibility : Icons.visibility_off,
+                  color: Colors.white,
+                ),
+                onPressed: () => setState(() {
+                  if (isConfirm) {
+                    _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                  } else {
+                    _isPasswordVisible = !_isPasswordVisible;
+                  }
+                }),
+              )
+            : null,
       ),
       validator: (value) => value == null || value.isEmpty ? 'Please enter $label' : null,
     );

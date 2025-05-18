@@ -32,7 +32,7 @@ class _SignInScreenState extends State<SignInScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildTextField('Email', _emailController, Icons.email, false),
+                  _buildTextField('Email', _emailController, Icons.person, false),
                   const SizedBox(height: 16.0),
                   _buildTextField('Password', _passwordController, Icons.lock, true),
                   const SizedBox(height: 16.0),
