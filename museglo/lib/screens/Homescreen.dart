@@ -12,7 +12,7 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
-}
+} //harusnya udah
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
