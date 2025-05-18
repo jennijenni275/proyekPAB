@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:museglo/screens/welcome_screen.dart';
+import 'package:shimmer/main.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -9,6 +10,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(const MainApp());
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MainApp extends StatelessWidget {
@@ -21,6 +24,6 @@ class MainApp extends StatelessWidget {
       title: 'MuseGlo',
       theme: ThemeData.dark(),
       home: WelcomeScreen(),
-   );
+    );
   }
 }

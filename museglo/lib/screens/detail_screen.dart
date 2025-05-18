@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:museglo/model/MuseumModel.dart'; // Import model
 
 class DetailScreen extends StatefulWidget {
-  final List<Map<String, dynamic>> collections;
+  final Museum museum;
 
-  const DetailScreen({super.key, required this.collections});
+  const DetailScreen({super.key, required this.museum});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
@@ -14,7 +15,7 @@ class _DetailScreenState extends State<DetailScreen> {
 
   void nextArtwork() {
     setState(() {
-      if (currentIndex < widget.collections.length - 1) {
+      if (currentIndex < widget.museum.collections.length - 1) {
         currentIndex++;
       }
     });
@@ -30,19 +31,20 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final artwork = widget.collections[currentIndex];
-    final title = artwork['title'] ?? 'Unknown Title';
-    final artist = artwork['artist'] ?? 'Unknown Artist';
-    final year = artwork['year']?.toString() ?? '-';
-    final description = artwork['description'] ?? 'No description';
+    final artwork = widget.museum.collections[currentIndex];
+    final title = artwork.title;
+    final artist = artwork.artist;
+    final year = artwork.year;
+    final description = artwork.description;
     final imageUrl =
-        artwork['image_url'] ??
-        'https://placehold.co/300x400/EEE/31343C?text=No+Image';
+        artwork.imageUrl.isNotEmpty
+            ? artwork.imageUrl
+            : 'https://placehold.co/300x400/EEE/31343C?text=No+Image';
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Detail Karya Seni'),
+        title: Text(widget.museum.name),
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
@@ -85,7 +87,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     ),
                   ),
                 ),
-              if (currentIndex < widget.collections.length - 1)
+              if (currentIndex < widget.museum.collections.length - 1)
                 Positioned(
                   right: 10,
                   child: GestureDetector(
