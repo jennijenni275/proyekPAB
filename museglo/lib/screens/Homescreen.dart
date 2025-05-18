@@ -102,6 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             : '',
                     mapUrl: museum.mapsUrl,
                     onTapDetail: () {
+                      print("Klik museum: ${museum.name}");
                       Navigator.push(
                         context,
                         MaterialPageRoute(

@@ -51,11 +51,14 @@ class Museum {
 
   factory Museum.fromMap(Map<String, dynamic> map) {
     var collectionsFromMap = <Collection>[];
-    if (map['collections'] != null && map['collections'] is Map<String, dynamic>) {
-      collectionsFromMap = (map['collections'] as Map<String, dynamic>)
-          .values
-          .map((item) => Collection.fromMap(item as Map<String, dynamic>))
-          .toList();
+
+    if (map['collections'] != null && map['collections'] is List) {
+      collectionsFromMap =
+          (map['collections'] as List)
+              .map(
+                (item) => Collection.fromMap(Map<String, dynamic>.from(item)),
+              )
+              .toList();
     }
 
     return Museum(

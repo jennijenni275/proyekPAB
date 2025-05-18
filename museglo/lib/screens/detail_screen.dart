@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:museglo/model/MuseumModel.dart'; // Import model
+import 'package:museglo/model/MuseumModel.dart';
 
 class DetailScreen extends StatefulWidget {
   final Museum museum;
@@ -12,6 +12,7 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   int currentIndex = 0;
+  bool isFavorite = false;
 
   void nextArtwork() {
     setState(() {
@@ -48,99 +49,131 @@ class _DetailScreenState extends State<DetailScreen> {
         backgroundColor: Colors.black,
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 16),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.network(
-                    imageUrl,
-                    height: 300,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 300,
-                        color: Colors.grey[300],
-                        child: const Center(
-                          child: Text('Gambar tidak tersedia'),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              if (currentIndex > 0)
-                Positioned(
-                  left: 10,
-                  child: GestureDetector(
-                    onTap: previousArtwork,
-                    child: const Icon(
-                      Icons.arrow_back_ios,
-                      size: 28,
-                      color: Colors.white,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 16),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      imageUrl,
+                      height: 300,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          height: 300,
+                          color: Colors.white,
+                          child: const Center(
+                            child: Text('Gambar tidak tersedia'),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
-              if (currentIndex < widget.museum.collections.length - 1)
                 Positioned(
+                  top: 10,
                   right: 10,
                   child: GestureDetector(
-                    onTap: nextArtwork,
-                    child: const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 28,
-                      color: Colors.white,
+                    onTap: () {
+                      setState(() {
+                        isFavorite = !isFavorite;
+                      });
+                    },
+                    child: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : Colors.white,
+                      size: 30,
                     ),
                   ),
                 ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(12),
-              ),
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Title: $title',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                if (currentIndex > 0)
+                  Positioned(
+                    left: 10,
+                    child: GestureDetector(
+                      onTap: previousArtwork,
+                      child: const Icon(
+                        Icons.arrow_back_ios,
+                        size: 28,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Artist: $artist',
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontStyle: FontStyle.italic,
+                if (currentIndex < widget.museum.collections.length - 1)
+                  Positioned(
+                    right: 10,
+                    child: GestureDetector(
+                      onTap: nextArtwork,
+                      child: const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 28,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text('Year: $year', style: const TextStyle(fontSize: 14)),
-                  const SizedBox(height: 12),
-                  Text(
-                    description,
-                    style: const TextStyle(fontSize: 14),
-                    textAlign: TextAlign.justify,
-                  ),
-                ],
+              ],
+            ),
+            const SizedBox(height: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white, // Ubah dari grey[200] ke white
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.shade300,
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Title: $title',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Artist: $artist',
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontStyle: FontStyle.italic,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Year: $year',
+                      style: const TextStyle(fontSize: 14, color: Colors.black),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      description,
+                      style: const TextStyle(fontSize: 14, color: Colors.black),
+                      textAlign: TextAlign.justify,
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+            const SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
