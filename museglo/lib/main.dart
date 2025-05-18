@@ -5,20 +5,12 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-<<<<<<< HEAD
-
   // CEK DULU SEBELUM INITIALIZE
   if (Firebase.apps.isEmpty) {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
   }
-
-=======
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
->>>>>>> 0323891053fa07a36762db5198662557cf48db98
   runApp(const MainApp());
 }
 
@@ -32,10 +24,6 @@ class MainApp extends StatelessWidget {
       title: 'MuseGlo',
       theme: ThemeData.dark(),
       home: WelcomeScreen(),
-<<<<<<< HEAD
     );
-=======
-   );
->>>>>>> 0323891053fa07a36762db5198662557cf48db98
   }
 }
