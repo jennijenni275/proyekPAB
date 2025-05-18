@@ -29,7 +29,11 @@ android {
         // For more information, see: https://flutter.dev/to/review-gradle-config.
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
         minSdk = 23
+=======
+        minSdk =23
+>>>>>>> Stashed changes
 =======
         minSdk =23
 >>>>>>> Stashed changes
