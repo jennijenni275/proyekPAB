@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:museglo/screens/welcome_screen.dart';
+import 'package:shimmer/main.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // CEK DULU SEBELUM INITIALIZE
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  }
-  runApp(const MainApp());
+  await Firebase.initializeApp();
+  runApp(const MyApp());
 }
 
 class MainApp extends StatelessWidget {

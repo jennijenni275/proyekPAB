@@ -4,6 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:museglo/screens/post_screen.dart';
 import 'package:museglo/screens/profile_screen.dart';
 import 'package:museglo/screens/search_screen.dart';
+import 'package:museglo/screens/detail_screen.dart';
+import 'package:museglo/model/MuseumModel.dart'; // Pastikan model sudah ada
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -63,27 +65,35 @@ class _HomeScreenState extends State<HomeScreen> {
 
           return ListView(
             padding: const EdgeInsets.all(16),
-            children: data.entries.map((entry) {
-              final museum = entry.value as Map;
+            children:
+                data.entries.map((entry) {
+                  final museum = Museum.fromMap(
+                    Map<String, dynamic>.from(entry.value),
+                  );
 
-              final collectionsMap = museum['collections'] as Map?;
-              final collections = collectionsMap?.values.toList() ?? [];
-
-              return MuseumCard(
-                name: museum['name'] ?? '',
-                description: museum['description'] ?? '',
-                address: museum['address'] ?? '',
-                artworks: collections.length,
-                imageUrl: collections.isNotEmpty
-                    ? collections[0]['image_url'] ?? ''
-                    : '',
-                mapUrl: museum['map_url'] ?? '',
-                onTapDetail: () {
-                  // Nanti bisa diarahkan ke detail screen
-                  debugPrint("Klik museum: ${museum['name']}");
-                },
-              );
-            }).toList(),
+                  return MuseumCard(
+                    name: museum.name,
+                    description:
+                        museum.collections.isNotEmpty
+                            ? museum.collections[0].description
+                            : 'Deskripsi tidak tersedia',
+                    address: museum.location,
+                    artworks: museum.collections.length,
+                    imageUrl:
+                        museum.collections.isNotEmpty
+                            ? museum.collections[0].imageUrl
+                            : '',
+                    mapUrl: museum.mapsUrl,
+                    onTapDetail: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => DetailScreen(museum: museum),
+                        ),
+                      );
+                    },
+                  );
+                }).toList(),
           );
         },
       ),
@@ -124,9 +134,9 @@ class MuseumCard extends StatelessWidget {
 
   Future<void> _launchMapUrl(BuildContext context) async {
     if (mapUrl.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Link peta tidak tersedia')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Link peta tidak tersedia')));
       return;
     }
 
@@ -134,9 +144,9 @@ class MuseumCard extends StatelessWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Tidak dapat membuka peta')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Tidak dapat membuka peta')));
     }
   }
 
