@@ -7,10 +7,11 @@ class TicketScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Tickets'),
-        backgroundColor: Colors.grey[800],
-        centerTitle: true,
-      ),
+  title: const Text('My Ticket'),
+  iconTheme: IconThemeData(
+    color: Theme.of(context).iconTheme.color,
+  ),
+),
       body: Center(
         child: Container(
           width: 300,

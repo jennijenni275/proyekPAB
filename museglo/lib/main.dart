@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:museglo/screens/welcome_screen.dart';
 import 'firebase_options.dart';
+
+final themeNotifier = ValueNotifier<ThemeMode>(ThemeMode.system);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,11 +16,22 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'MuseGlo',
-      theme: ThemeData.dark(),
-      home: const WelcomeScreen(),
+    return ValueListenableBuilder<ThemeMode>(
+      valueListenable: themeNotifier,
+      builder: (context, mode, _) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'MuseGlo',
+          theme: ThemeData.light().copyWith(
+            iconTheme: const IconThemeData(color: Colors.black),
+          ),
+          darkTheme: ThemeData.dark().copyWith(
+            iconTheme: const IconThemeData(color: Colors.white),
+          ),
+          themeMode: mode,
+          home: const WelcomeScreen(),
+        );
+      },
     );
   }
 }

@@ -36,4 +36,5 @@ flutter:
     - assets/logo.jpg
     - assets/background.jpg
     - assets/profile.jpg
+    - assets/museum.json
     

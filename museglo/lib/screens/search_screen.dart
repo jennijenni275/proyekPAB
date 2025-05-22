@@ -38,7 +38,7 @@ class SearchingPage extends StatelessWidget {
                       controller: _searchController,
                       decoration: InputDecoration(
                         hintText: 'Searching...',
-                        prefixIcon: Icon(Icons.search, color: Colors.orange),
+                        prefixIcon: Icon(Icons.search, color: Theme.of(context).iconTheme.color),
                         suffixIcon: Icon(Icons.close, color: Colors.orange),
                         border: InputBorder.none,
                         contentPadding: EdgeInsets.symmetric(horizontal: 16),

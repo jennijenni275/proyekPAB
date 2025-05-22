@@ -44,10 +44,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MuseGlo'),
-        backgroundColor: Colors.black,
-        centerTitle: true,
-      ),
+  title: const Text('MuseGlo'),
+  backgroundColor: Colors.black,
+  centerTitle: true,
+  iconTheme: IconThemeData(
+    color: Theme.of(context).iconTheme.color,
+  ),
+),
       body: FutureBuilder<DatabaseEvent>(
         future: FirebaseDatabase.instance.ref('museums').once(),
         builder: (context, snapshot) {
@@ -84,51 +87,71 @@ class _HomeScreenState extends State<HomeScreen> {
                     .toList();
           }
 
-          return ListView(
+          // Perbaikan: Tampilkan semua koleksi dari setiap museum
+          return ListView.builder(
             padding: const EdgeInsets.all(16),
-            children:
-                museums.map((museum) {
-                  return MuseumCard(
-                    name: museum.name,
-                    description:
-                        museum.collections.isNotEmpty
-                            ? museum.collections[0].description
-                            : 'Deskripsi tidak tersedia',
-                    address: museum.location,
-                    artworks: museum.collections.length,
-                    imageUrl:
-                        museum.collections.isNotEmpty
-                            ? museum.collections[0].imageUrl
-                            : '',
-                    mapUrl: museum.mapsUrl,
-                    onTapDetail: () {
-                      print("Klik museum: ${museum.name}");
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => DetailScreen(museum: museum),
-                        ),
+            itemCount: museums.length,
+            itemBuilder: (context, museumIndex) {
+              final museum = museums[museumIndex];
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    museum.name,
+                    style: const TextStyle(
+                        fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    museum.location,
+                    style: const TextStyle(
+                        fontSize: 14, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 8),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: museum.collections.length,
+                    itemBuilder: (context, collectionIndex) {
+                      final collection = museum.collections[collectionIndex];
+                      return MuseumCard(
+                        name: collection.title,
+                        description: collection.description ?? 'Deskripsi tidak tersedia',
+                        address: museum.location,
+                        artworks: museum.collections.length,
+                        imageUrl: collection.imageUrl ?? '',
+                        mapUrl: museum.mapsUrl,
+                        onTapDetail: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => DetailScreen(museum: museum),
+                            ),
+                          );
+                        },
                       );
                     },
-                  );
-                }).toList(),
+                  ),
+                  const SizedBox(height: 24),
+                ],
+              );
+            },
           );
         },
       ),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: _onBottomNavTapped,
-
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.blue,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-      ),
+  currentIndex: _selectedIndex,
+  onTap: _onBottomNavTapped,
+  type: BottomNavigationBarType.fixed,
+  selectedItemColor: Theme.of(context).iconTheme.color,
+  unselectedItemColor: Theme.of(context).iconTheme.color?.withOpacity(0.5),
+  items: const [
+    BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+    BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+    BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
+    BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+  ],
+),
     );
   }
 }
@@ -174,7 +197,7 @@ class MuseumCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 8),
       elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
@@ -207,7 +230,7 @@ class MuseumCard extends StatelessWidget {
                   name,
                   style: const TextStyle(fontWeight: FontWeight.w500),
                 ),
-                subtitle: const Text('Ketuk untuk melihat detail museum'),
+                subtitle: const Text('Ketuk untuk melihat detail koleksi'),
               ),
               const SizedBox(height: 8),
               Text(description, style: const TextStyle(fontSize: 14)),

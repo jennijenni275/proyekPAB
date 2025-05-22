@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:museglo/screens/favorite_screen.dart';
 import 'package:museglo/screens/ticket_page_screen.dart';
+import 'package:museglo/main.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -34,8 +35,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       if (data != null) {
         setState(() {
-          _usernameController.text = data['fullName'] ?? 'User';
-          email = data['email'] ?? user.email ?? '';
           _phoneController.text = data['phone'] ?? '08*****';
         });
       }
@@ -52,8 +51,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
+  void _toggleThemeMode() {
+    setState(() {
+      if (themeNotifier.value == ThemeMode.light) {
+        themeNotifier.value = ThemeMode.dark;
+      } else {
+        themeNotifier.value = ThemeMode.light;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final iconColor = Theme.of(context).iconTheme.color;
+    final textColor = isDark ? Colors.white : Colors.black;
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
@@ -63,7 +75,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
-        foregroundColor: Colors.white,
+        foregroundColor: textColor,
+        actions: [
+          IconButton(
+            icon: Icon(
+              isDark ? Icons.light_mode : Icons.dark_mode,
+              color: iconColor,
+            ),
+            tooltip: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+            onPressed: _toggleThemeMode,
+          ),
+        ],
       ),
       body: Stack(
         children: [
@@ -101,7 +123,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: CircleAvatar(
                           radius: 20,
                           backgroundColor: Colors.white,
-                          child: const Icon(Icons.camera_alt, size: 20, color: Colors.black),
+                          child: Icon(Icons.camera_alt, size: 20, color: Colors.black),
                         ),
                       ),
                     ),
@@ -112,21 +134,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.9),
+                    color: isDark ? Colors.grey[900]!.withOpacity(0.9) : Colors.white.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      buildEditableField('Username', _usernameController),
+                      buildEditableField('Username', _usernameController, textColor),
                       const SizedBox(height: 10),
-                      buildInfoField('Email', email),
+                      buildInfoField('Email', email, textColor),
                       const SizedBox(height: 10),
-                      buildEditableField('Phone', _phoneController),
+                      buildEditableField('Phone', _phoneController, textColor),
                       const SizedBox(height: 30),
                       ListTile(
-                        leading: const Icon(Icons.confirmation_num),
-                        title: const Text('My Ticket'),
+                        leading: Icon(Icons.confirmation_num, color: iconColor),
+                        title: Text('My Ticket', style: TextStyle(color: textColor)),
                         onTap: () {
                           Navigator.push(
                             context,
@@ -135,8 +157,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                       ),
                       ListTile(
-                        leading: const Icon(Icons.star_border),
-                        title: const Text('Favorites'),
+                        leading: Icon(Icons.star_border, color: iconColor),
+                        title: Text('Favorites', style: TextStyle(color: textColor)),
                         onTap: () {
                           Navigator.push(
                             context,
@@ -158,6 +180,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           child: const Text('Log Out', style: TextStyle(color: Colors.white)),
                         ),
                       ),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: ElevatedButton.icon(
+                          icon: Icon(
+                            isDark ? Icons.light_mode : Icons.dark_mode,
+                            color: iconColor,
+                          ),
+                          label: Text(isDark ? 'Light Mode' : 'Dark Mode', style: TextStyle(color: textColor)),
+                          onPressed: _toggleThemeMode,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueGrey,
+                            foregroundColor: textColor,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -169,46 +206,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget buildEditableField(String label, TextEditingController controller) {
+  Widget buildEditableField(String label, TextEditingController controller, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor)),
         const SizedBox(height: 4),
         TextField(
           controller: controller,
-          style: const TextStyle(color: Colors.black),
+          style: TextStyle(color: textColor),
           decoration: InputDecoration(
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide.none,
-            ),
+            border: const OutlineInputBorder(),
           ),
         ),
       ],
     );
   }
 
-  Widget buildInfoField(String label, String value) {
+  Widget buildInfoField(String label, String value, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor)),
         const SizedBox(height: 4),
-        Container(
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(value,
-              style: const TextStyle(
-                  fontWeight: FontWeight.w500, color: Colors.black)),
-        ),
+        Text(value, style: TextStyle(fontSize: 16, color: textColor)),
       ],
     );
   }

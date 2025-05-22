@@ -7,12 +7,20 @@ class DetailProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final textColor = isDark ? Colors.white : Colors.black;
+    final boxColor = isDark ? Colors.grey[800] : Colors.grey[300];
 
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Theme.of(context).iconTheme.color),
+          onPressed: () => Navigator.pop(context),
+        ),
         title: const Text('Detail Profil'),
-        backgroundColor: Colors.grey[300],
+        backgroundColor: boxColor,
         centerTitle: true,
+        foregroundColor: textColor,
       ),
       body: Stack(
         children: [
@@ -24,28 +32,38 @@ class DetailProfileScreen extends StatelessWidget {
               ),
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.account_circle, size: 100, color: Colors.grey),
-              const SizedBox(height: 16),
-              DetailProfileField(
-                label: 'Username',
-                value: user?.displayName ?? 'Tidak diketahui',
-              ),
-              DetailProfileField(
-                label: 'Email',
-                value: user?.email ?? 'Tidak diketahui',
-              ),
-              DetailProfileField(
-                label: 'Phone',
-                value: user?.phoneNumber ?? 'Belum ada',
-              ),
-            ],
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.account_circle, size: 100, color: Colors.grey[500]),
+                const SizedBox(height: 16),
+                DetailProfileField(
+                  label: 'Username',
+                  value: user?.displayName ?? 'Tidak diketahui',
+                  boxColor: boxColor!,
+                  textColor: textColor,
+                ),
+                DetailProfileField(
+                  label: 'Email',
+                  value: user?.email ?? 'Tidak diketahui',
+                  boxColor: boxColor!,
+                  textColor: textColor,
+                ),
+                DetailProfileField(
+                  label: 'Phone',
+                  value: user?.phoneNumber ?? 'Belum ada',
+                  boxColor: boxColor!,
+                  textColor: textColor,
+                ),
+              ],
+            ),
           ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Theme.of(context).iconTheme.color,
+        unselectedItemColor: Theme.of(context).iconTheme.color?.withOpacity(0.5),
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
@@ -60,10 +78,14 @@ class DetailProfileScreen extends StatelessWidget {
 class DetailProfileField extends StatelessWidget {
   final String label;
   final String value;
+  final Color boxColor;
+  final Color textColor;
 
   const DetailProfileField({
     required this.label,
     required this.value,
+    required this.boxColor,
+    required this.textColor,
     super.key,
   });
 
@@ -71,17 +93,22 @@ class DetailProfileField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: const TextStyle(color: Colors.black, fontSize: 16)),
+          Text(label, style: TextStyle(color: textColor, fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 4),
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.grey[300],
+              color: boxColor,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Text(value, style: const TextStyle(color: Colors.black, fontSize: 16)),
+            child: Text(
+              value,
+              style: TextStyle(color: textColor, fontSize: 16),
+            ),
           ),
         ],
       ),

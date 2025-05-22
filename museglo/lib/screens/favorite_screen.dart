@@ -52,9 +52,9 @@ class FavoriteItem extends StatelessWidget {
       color: Colors.grey[800],
       margin: const EdgeInsets.symmetric(vertical: 8),
       child: ListTile(
-        leading: Image.network(imageUrl, width: 60, height: 60, fit: BoxFit.cover),
-        title: Text(title, style: const TextStyle(color: Colors.white)),
-        trailing: const Icon(Icons.favorite, color: Colors.red),
+  leading: Icon(Icons.favorite, color: Theme.of(context).iconTheme.color),
+  title: Text('Favorite', style: TextStyle(color: Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.black)
+        ),
       ),
     );
   }
