@@ -32,6 +32,22 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.museum.collections.isEmpty) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.museum.name),
+          backgroundColor: Colors.black,
+          centerTitle: true,
+        ),
+        body: const Center(
+          child: Text(
+            'Tidak ada koleksi pada museum ini',
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      );
+    }
+
     final artwork = widget.museum.collections[currentIndex];
     final title = artwork.title;
     final artist = artwork.artist;
@@ -89,7 +105,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     },
                     child: Icon(
                       isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : Colors.white,
+                      color: isFavorite ? Colors.red : Colors.grey,
                       size: 30,
                     ),
                   ),
@@ -125,7 +141,7 @@ class _DetailScreenState extends State<DetailScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white, // Ubah dari grey[200] ke white
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(

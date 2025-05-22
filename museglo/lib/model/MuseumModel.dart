@@ -50,7 +50,7 @@ class Museum {
   });
 
   factory Museum.fromMap(Map<String, dynamic> map) {
-    var collectionsFromMap = <Collection>[];
+    List<Collection> collectionsFromMap = [];
 
     if (map['collections'] != null && map['collections'] is List) {
       collectionsFromMap =
