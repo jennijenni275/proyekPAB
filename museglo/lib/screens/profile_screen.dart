@@ -8,6 +8,8 @@ import 'package:museglo/screens/favorite_screen.dart';
 import 'package:museglo/screens/ticket_page_screen.dart';
 import 'package:museglo/main.dart';
 
+// ...existing imports...
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -70,22 +72,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        title: const Text('Profil Saya'),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-        foregroundColor: textColor,
-        actions: [
-          IconButton(
-            icon: Icon(
-              isDark ? Icons.light_mode : Icons.dark_mode,
-              color: iconColor,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
+        child: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            'Profile Screen',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
             ),
-            tooltip: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
-            onPressed: _toggleThemeMode,
           ),
-        ],
+          iconTheme: const IconThemeData(color: Colors.black),
+        ),
       ),
       body: Stack(
         children: [
@@ -157,7 +160,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         },
                       ),
                       ListTile(
-                        leading: Icon(Icons.star_border, color: iconColor),
+                        leading: Icon(Icons.favorite, color: iconColor),
                         title: Text('Favorites', style: TextStyle(color: textColor)),
                         onTap: () {
                           Navigator.push(
@@ -234,3 +237,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 }
+

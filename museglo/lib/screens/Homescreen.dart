@@ -10,6 +10,7 @@ import 'package:museglo/screens/search_screen.dart';
 import 'package:museglo/screens/detail_screen.dart';
 import 'package:museglo/model/MuseumModel.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:museglo/screens/galleryInfo_screen.dart'; // Tambahkan import ini
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,10 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     List<Museum> museums = [];
 
     for (var doc in snapshot.docs) {
-      // Ambil data museum
       var museumData = doc.data();
-
-      // Ambil koleksi dari subcollection
       final collectionsSnapshot =
           await doc.reference.collection('collections').get();
 
@@ -75,13 +73,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return museums;
   }
 
-  // Fungsi upload gambar ke Firebase Storage dan dapatkan URL download-nya
   Future<String?> uploadImage() async {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile == null) {
-      // User batal pilih gambar
       return null;
     }
 
@@ -107,11 +103,36 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final appBarBg = isDark ? Colors.black : Colors.white;
+    final appBarText = isDark ? Colors.white : Colors.black;
+    final appBarIcon = isDark ? Colors.white : Colors.black;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MuseGlo'),
-        backgroundColor: Colors.black,
+        backgroundColor: appBarBg,
+        elevation: 0,
         centerTitle: true,
+        leading: IconButton(
+          icon: Icon(Icons.menu, color: appBarIcon),
+          onPressed: () {
+            // Navigasi ke halaman GalleryInfoScreen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const GalleryInfoScreen()),
+            );
+          },
+        ),
+        title: Text(
+          'MuseGlo',
+          style: TextStyle(
+            color: appBarText,
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 1.2,
+          ),
+        ),
+        iconTheme: IconThemeData(color: appBarIcon),
       ),
       body: FutureBuilder<List<Museum>>(
         future: fetchMuseums(),
@@ -167,8 +188,6 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
-
-      // Tombol untuk upload gambar ke Firebase Storage
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final url = await uploadImage();
@@ -176,7 +195,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text('Upload sukses! URL: $url')));
-            // Jika mau, simpan url ke Firestore di sini
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('Upload batal atau gagal')),
