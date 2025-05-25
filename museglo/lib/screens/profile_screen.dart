@@ -8,8 +8,6 @@ import 'package:museglo/screens/favorite_screen.dart';
 import 'package:museglo/screens/ticket_page_screen.dart';
 import 'package:museglo/main.dart';
 
-// ...existing imports...
-
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
@@ -20,7 +18,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  String email = '';
+  final TextEditingController _emailController = TextEditingController();
   File? _profileImage;
 
   @override
@@ -35,11 +33,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
       final data = doc.data();
 
-      if (data != null) {
-        setState(() {
-          _phoneController.text = data['phone'] ?? '08*****';
-        });
-      }
+      setState(() {
+        // Ambil data dari Firestore jika ada, fallback ke FirebaseAuth jika tidak ada
+        _usernameController.text = data?['fullName'] ?? user.displayName ?? '';
+        _emailController.text = data?['email'] ?? user.email ?? '';
+        _phoneController.text = data?['phone'] ?? '08*****';
+      });
     }
   }
 
@@ -61,6 +60,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
         themeNotifier.value = ThemeMode.light;
       }
     });
+  }
+
+  Future<void> _updateProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      try {
+        // Update displayName di Firebase Auth
+        await user.updateDisplayName(_usernameController.text.trim());
+
+        // Update Firestore
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
+          'fullName': _usernameController.text.trim(),
+          'phone': _phoneController.text.trim(),
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Profile updated successfully')),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to update profile: $e')),
+        );
+      }
+    }
   }
 
   @override
@@ -145,9 +168,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       buildEditableField('Username', _usernameController, textColor),
                       const SizedBox(height: 10),
-                      buildInfoField('Email', email, textColor),
+                      buildEditableEmailField('Email', _emailController, textColor),
                       const SizedBox(height: 10),
                       buildEditableField('Phone', _phoneController, textColor),
+                      const SizedBox(height: 20),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: _updateProfile,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                          ),
+                          child: const Text('Update Profile'),
+                        ),
+                      ),
                       const SizedBox(height: 30),
                       ListTile(
                         leading: Icon(Icons.confirmation_num, color: iconColor),
@@ -218,23 +253,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
         TextField(
           controller: controller,
           style: TextStyle(color: textColor),
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
           ),
         ),
       ],
     );
   }
 
-  Widget buildInfoField(String label, String value, Color textColor) {
+  Widget buildEditableEmailField(String label, TextEditingController controller, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor)),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(fontSize: 16, color: textColor)),
+        TextField(
+          controller: controller,
+          style: TextStyle(color: textColor),
+          decoration: const InputDecoration(
+            border: OutlineInputBorder(),
+          ),
+          readOnly: true, // Email hanya bisa dibaca, tidak bisa diubah
+        ),
       ],
     );
   }
 }
-
