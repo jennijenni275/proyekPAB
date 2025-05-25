@@ -23,13 +23,15 @@ class _WelcomeScreenState extends State<WelcomeScreen>
       duration: const Duration(seconds: 2),
     );
 
-    _fadeAnimation = Tween<double>(begin: 0, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutBack),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutBack));
 
     _controller.forward();
   }
@@ -61,20 +63,9 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                       color: Colors.white12,
                       borderRadius: BorderRadius.circular(12),
                       // Ganti dengan warna dulu jika gambar tidak ada
-                       image: const DecorationImage(
-                       image: AssetImage("assets/logo.jpg"),
-                       fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'MuseGlo',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 4,
-                        ),
+                      image: const DecorationImage(
+                        image: AssetImage("assets/logo.jpg"),
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
@@ -100,9 +91,7 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                   onPressed: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(
-                        builder: (_) => const SignInScreen(),
-                      ),
+                      MaterialPageRoute(builder: (_) => const SignInScreen()),
                     );
                   },
                   icon: const Icon(Icons.login),

@@ -32,7 +32,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void fetchUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
       final data = doc.data();
 
       if (data != null) {
@@ -95,15 +99,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(
             height: screenHeight,
             width: double.infinity,
-            child: Image.asset(
-              'assets/background.jpg',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/background.jpg', fit: BoxFit.cover),
           ),
-          Container(
-            height: screenHeight,
-            color: Colors.black.withOpacity(0.3),
-          ),
+          Container(height: screenHeight, color: Colors.black.withOpacity(0.3)),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 120, bottom: 40),
             child: Column(
@@ -114,9 +112,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     CircleAvatar(
                       radius: 70,
-                      backgroundImage: _profileImage != null
-                          ? FileImage(_profileImage!)
-                          : const AssetImage('assets/profile.jpg') as ImageProvider,
+                      backgroundImage:
+                          _profileImage != null
+                              ? FileImage(_profileImage!)
+                              : const AssetImage('assets/profile.jpg')
+                                  as ImageProvider,
                     ),
                     Positioned(
                       bottom: 0,
@@ -126,7 +126,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: CircleAvatar(
                           radius: 20,
                           backgroundColor: Colors.white,
-                          child: Icon(Icons.camera_alt, size: 20, color: Colors.black),
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 20,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
@@ -137,13 +141,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.grey[900]!.withOpacity(0.9) : Colors.white.withOpacity(0.9),
+                    color:
+                        isDark
+                            ? Colors.grey[900]!.withOpacity(0.9)
+                            : Colors.white.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      buildEditableField('Username', _usernameController, textColor),
+                      buildEditableField(
+                        'Username',
+                        _usernameController,
+                        textColor,
+                      ),
                       const SizedBox(height: 10),
                       buildInfoField('Email', email, textColor),
                       const SizedBox(height: 10),
@@ -151,21 +162,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 30),
                       ListTile(
                         leading: Icon(Icons.confirmation_num, color: iconColor),
-                        title: Text('My Ticket', style: TextStyle(color: textColor)),
+                        title: Text(
+                          'My Ticket',
+                          style: TextStyle(color: textColor),
+                        ),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const TicketScreen()),
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => const TicketScreen(
+                                    museums: [],
+                                    museumName: '',
+                                  ),
+                            ),
                           );
                         },
                       ),
                       ListTile(
                         leading: Icon(Icons.favorite, color: iconColor),
-                        title: Text('Favorites', style: TextStyle(color: textColor)),
+                        title: Text(
+                          'Favorites',
+                          style: TextStyle(color: textColor),
+                        ),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const FavoriteScreen()),
+                            MaterialPageRoute(
+                              builder: (_) => const FavoriteScreen(),
+                            ),
                           );
                         },
                       ),
@@ -177,10 +202,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Navigator.pop(context); // Logout
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 174, 139, 49),
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              174,
+                              139,
+                              49,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 12,
+                            ),
                           ),
-                          child: const Text('Log Out', style: TextStyle(color: Colors.white)),
+                          child: const Text(
+                            'Log Out',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -190,7 +226,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             isDark ? Icons.light_mode : Icons.dark_mode,
                             color: iconColor,
                           ),
-                          label: Text(isDark ? 'Light Mode' : 'Dark Mode', style: TextStyle(color: textColor)),
+                          label: Text(
+                            isDark ? 'Light Mode' : 'Dark Mode',
+                            style: TextStyle(color: textColor),
+                          ),
                           onPressed: _toggleThemeMode,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueGrey,
@@ -209,18 +248,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget buildEditableField(String label, TextEditingController controller, Color textColor) {
+  Widget buildEditableField(
+    String label,
+    TextEditingController controller,
+    Color textColor,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor)),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: textColor,
+          ),
+        ),
         const SizedBox(height: 4),
         TextField(
           controller: controller,
           style: TextStyle(color: textColor),
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-          ),
+          decoration: InputDecoration(border: const OutlineInputBorder()),
         ),
       ],
     );
@@ -230,11 +278,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor)),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: textColor,
+          ),
+        ),
         const SizedBox(height: 4),
         Text(value, style: TextStyle(fontSize: 16, color: textColor)),
       ],
     );
   }
 }
-

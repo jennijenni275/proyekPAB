@@ -4,6 +4,7 @@ class Collection {
   final String year;
   final String description;
   final String imageUrl;
+  final String imageBase64;
 
   Collection({
     required this.title,
@@ -11,6 +12,7 @@ class Collection {
     required this.year,
     required this.description,
     required this.imageUrl,
+    required this.imageBase64,
   });
 
   factory Collection.fromMap(Map<String, dynamic> map) {
@@ -20,6 +22,7 @@ class Collection {
       year: map['year'] ?? '',
       description: map['description'] ?? '',
       imageUrl: map['image_url'] ?? '',
+      imageBase64: map['image_base64'] ?? '',
     );
   }
 
@@ -30,6 +33,7 @@ class Collection {
       'year': year,
       'description': description,
       'image_url': imageUrl,
+      'image_base64': imageBase64,
     };
   }
 }

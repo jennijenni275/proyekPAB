@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:museglo/model/MuseumModel.dart';
 
@@ -53,10 +54,30 @@ class _DetailScreenState extends State<DetailScreen> {
     final artist = artwork.artist;
     final year = artwork.year;
     final description = artwork.description;
-    final imageUrl =
-        artwork.imageUrl.isNotEmpty
-            ? artwork.imageUrl
-            : 'https://placehold.co/300x400/EEE/31343C?text=No+Image';
+
+    final imageWidget =
+        artwork.imageBase64 != null && artwork.imageBase64!.isNotEmpty
+            ? Image.memory(
+              base64Decode(artwork.imageBase64!),
+              height: 300,
+              width: double.infinity,
+              fit: BoxFit.cover,
+            )
+            : Image.network(
+              artwork.imageUrl.isNotEmpty
+                  ? artwork.imageUrl
+                  : 'https://placehold.co/300x400/EEE/31343C?text=No+Image',
+              height: 300,
+              width: double.infinity,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 300,
+                  color: Colors.white,
+                  child: const Center(child: Text('Gambar tidak tersedia')),
+                );
+              },
+            );
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -77,21 +98,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.network(
-                      imageUrl,
-                      height: 300,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Container(
-                          height: 300,
-                          color: Colors.white,
-                          child: const Center(
-                            child: Text('Gambar tidak tersedia'),
-                          ),
-                        );
-                      },
-                    ),
+                    child: imageWidget,
                   ),
                 ),
                 Positioned(
