@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:museglo/screens/Homescreen.dart';
 import 'package:museglo/screens/search_screen.dart';
 import 'package:museglo/screens/profile_screen.dart';
@@ -61,7 +62,15 @@ class _PostImagePageState extends State<PostImagePage> {
     });
 
     try {
-      // Simpan gambar ke Firebase Storage (jika ingin upload gambar, tambahkan logika upload dan dapatkan url)
+      // Upload gambar ke Firebase Storage
+      String imageUrl = '';
+      if (_image != null) {
+        final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        final storageRef = FirebaseStorage.instance.ref().child('collections/$fileName.jpg');
+        await storageRef.putFile(_image!);
+        imageUrl = await storageRef.getDownloadURL();
+      }
+
       final ref = FirebaseFirestore.instance.collection('museums').doc(_selectedMuseumId);
 
       await ref.collection('collections').add({
@@ -69,7 +78,7 @@ class _PostImagePageState extends State<PostImagePage> {
         'artist': FirebaseAuth.instance.currentUser?.displayName ?? 'Unknown',
         'year': DateTime.now().year.toString(),
         'description': _descController.text,
-        'imageUrl': '', // Tambahkan url gambar jika upload ke Storage
+        'imageUrl': imageUrl, // Simpan url gambar hasil upload
       });
 
       setState(() {
