@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:museglo/model/favorite_storage.dart';
 import 'package:museglo/model/MuseumModel.dart';
 
 class DetailScreen extends StatefulWidget {
@@ -13,7 +14,39 @@ class DetailScreen extends StatefulWidget {
 
 class _DetailScreenState extends State<DetailScreen> {
   int currentIndex = 0;
-  bool isFavorite = false;
+
+  bool isCurrentFavorite() {
+    final current = widget.museum.collections[currentIndex];
+    return FavoriteStorage.favorites.any(
+      (item) =>
+          item.title == current.title &&
+          item.artist == current.artist &&
+          item.year == current.year,
+    );
+  }
+
+  void toggleFavorite() {
+    final current = widget.museum.collections[currentIndex];
+    final exists = FavoriteStorage.favorites.any(
+      (item) =>
+          item.title == current.title &&
+          item.artist == current.artist &&
+          item.year == current.year,
+    );
+
+    setState(() {
+      if (exists) {
+        FavoriteStorage.favorites.removeWhere(
+          (item) =>
+              item.title == current.title &&
+              item.artist == current.artist &&
+              item.year == current.year,
+        );
+      } else {
+        FavoriteStorage.favorites.add(current);
+      }
+    });
+  }
 
   void nextArtwork() {
     setState(() {
@@ -50,10 +83,6 @@ class _DetailScreenState extends State<DetailScreen> {
     }
 
     final artwork = widget.museum.collections[currentIndex];
-    final title = artwork.title;
-    final artist = artwork.artist;
-    final year = artwork.year;
-    final description = artwork.description;
 
     final imageWidget =
         artwork.imageBase64 != null && artwork.imageBase64!.isNotEmpty
@@ -105,14 +134,12 @@ class _DetailScreenState extends State<DetailScreen> {
                   top: 10,
                   right: 10,
                   child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        isFavorite = !isFavorite;
-                      });
-                    },
+                    onTap: toggleFavorite,
                     child: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : Colors.grey,
+                      isCurrentFavorite()
+                          ? Icons.favorite
+                          : Icons.favorite_border,
+                      color: isCurrentFavorite() ? Colors.red : Colors.grey,
                       size: 30,
                     ),
                   ),
@@ -163,7 +190,7 @@ class _DetailScreenState extends State<DetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Title: $title',
+                      'Title: ${artwork.title}',
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -172,7 +199,7 @@ class _DetailScreenState extends State<DetailScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Artist: $artist',
+                      'Artist: ${artwork.artist}',
                       style: const TextStyle(
                         fontSize: 14,
                         fontStyle: FontStyle.italic,
@@ -181,12 +208,12 @@ class _DetailScreenState extends State<DetailScreen> {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Year: $year',
+                      'Year: ${artwork.year}',
                       style: const TextStyle(fontSize: 14, color: Colors.black),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      description,
+                      artwork.description,
                       style: const TextStyle(fontSize: 14, color: Colors.black),
                       textAlign: TextAlign.justify,
                     ),
