@@ -1,16 +1,16 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:museglo/screens/post_screen.dart';
 import 'package:museglo/screens/profile_screen.dart';
 import 'package:museglo/screens/search_screen.dart';
 import 'package:museglo/screens/detail_screen.dart';
+import 'package:museglo/screens/galleryInfo_screen.dart';
 import 'package:museglo/model/MuseumModel.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:museglo/screens/galleryInfo_screen.dart'; // Tambahkan import ini
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,41 +23,45 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   void _onBottomNavTapped(int index) {
-    if (index == 0) {
-      setState(() => _selectedIndex = index);
-    } else if (index == 1) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => SearchingPage()),
-      );
-    } else if (index == 2) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => PostImagePage()),
-      );
-    } else if (index == 3) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => const ProfileScreen()),
-      );
+    switch (index) {
+      case 0:
+        setState(() => _selectedIndex = index);
+        break;
+      case 1:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => SearchingPage()),
+        );
+        break;
+      case 2:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => PostImagePage()),
+        );
+        break;
+      case 3:
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ProfileScreen()),
+        );
+        break;
     }
   }
 
   Future<List<Museum>> fetchMuseums() async {
     final snapshot =
         await FirebaseFirestore.instance.collection('museums').get();
-
     List<Museum> museums = [];
 
     for (var doc in snapshot.docs) {
       var museumData = doc.data();
+
       final collectionsSnapshot =
           await doc.reference.collection('collections').get();
-
       List<Collection> collections =
-          collectionsSnapshot.docs.map((cDoc) {
-            return Collection.fromMap(cDoc.data());
-          }).toList();
+          collectionsSnapshot.docs
+              .map((cDoc) => Collection.fromMap(cDoc.data()))
+              .toList();
 
       museums.add(
         Museum(
@@ -66,6 +70,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mapsUrl: museumData['maps_url'] ?? '',
           openHours: museumData['open_hours'] ?? '',
           collections: collections,
+          imgMuseum: museumData['img_museum'] ?? '',
         ),
       );
     }
@@ -77,11 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile == null) {
-      return null;
-    }
+    if (pickedFile == null) return null;
 
-    final File file = File(pickedFile.path);
+    final file = File(pickedFile.path);
     final fileName = DateTime.now().millisecondsSinceEpoch.toString();
 
     try {
@@ -89,7 +92,6 @@ class _HomeScreenState extends State<HomeScreen> {
         'museum_images/$fileName.jpg',
       );
       final uploadTask = ref.putFile(file);
-
       final snapshot = await uploadTask.whenComplete(() {});
       final downloadUrl = await snapshot.ref.getDownloadURL();
 
@@ -105,7 +107,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final appBarBg = isDark ? Colors.black : Colors.white;
-    final appBarText = isDark ? Colors.white : Colors.black;
     final appBarIcon = isDark ? Colors.white : Colors.black;
 
     return Scaffold(
@@ -116,23 +117,12 @@ class _HomeScreenState extends State<HomeScreen> {
         leading: IconButton(
           icon: Icon(Icons.menu, color: appBarIcon),
           onPressed: () {
-            // Navigasi ke halaman GalleryInfoScreen
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const GalleryInfoScreen()),
             );
           },
         ),
-        title: Text(
-          'MuseGlo',
-          style: TextStyle(
-            color: appBarText,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 1.2,
-          ),
-        ),
-        iconTheme: IconThemeData(color: appBarIcon),
       ),
       body: FutureBuilder<List<Museum>>(
         future: fetchMuseums(),
@@ -141,16 +131,17 @@ class _HomeScreenState extends State<HomeScreen> {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Terjadi kesalahan: ${snapshot.error}'));
           }
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('Tidak ada data museum'));
+            return const Center(child: Text('Tidak ada data museum.'));
           }
 
+          final museums = snapshot.data!;
           return ListView.builder(
-            itemCount: snapshot.data!.length,
+            itemCount: museums.length,
             itemBuilder: (context, index) {
-              final museum = snapshot.data![index];
+              final museum = museums[index];
               final firstCollection =
                   museum.collections.isNotEmpty ? museum.collections[0] : null;
 
@@ -160,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     firstCollection?.description ?? 'Deskripsi tidak tersedia',
                 address: museum.location,
                 artworks: museum.collections.length,
-                imageUrl: firstCollection?.imageUrl ?? '',
+                imageUrl: museum.imgMuseum, // gunakan gambar utama museum
                 mapUrl: museum.mapsUrl,
                 onTapDetail: () {
                   Navigator.push(
@@ -188,21 +179,6 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final url = await uploadImage();
-          if (url != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Upload sukses! URL: $url')));
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Upload batal atau gagal')),
-            );
-          }
-        },
-        child: const Icon(Icons.upload_file),
-      ),
     );
   }
 }
@@ -228,8 +204,11 @@ class MuseumCard extends StatelessWidget {
   });
 
   void _launchMapsUrl(String url) async {
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
+    final uri = Uri.tryParse(url);
+    if (uri != null && await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      debugPrint("Tidak dapat membuka URL: $url");
     }
   }
 
@@ -237,33 +216,34 @@ class MuseumCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
-      margin: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (imageUrl.isNotEmpty)
-            Image.network(
-              imageUrl,
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(12),
+              ),
+              child: Image.network(
+                imageUrl,
+                height: 200,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
           Padding(
             padding: const EdgeInsets.all(12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Text(name, style: Theme.of(context).textTheme.titleLarge),
                 const SizedBox(height: 4),
                 Text(description, maxLines: 2, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 8),
-                Text('Alamat: $address'),
-                Text('Karya seni: $artworks'),
+                Text('📍 $address'),
+                Text('🖼️ Karya seni: $artworks'),
                 const SizedBox(height: 8),
                 Row(
                   children: [

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +17,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
+  String email = '';
   File? _profileImage;
 
   @override
@@ -27,24 +26,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
     fetchUserData();
   }
 
-  void fetchUserData() async {
+  Future<void> fetchUserData() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      final doc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      final doc =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(user.uid)
+              .get();
       final data = doc.data();
 
       setState(() {
-        // Ambil data dari Firestore jika ada, fallback ke FirebaseAuth jika tidak ada
-        _usernameController.text = data?['fullName'] ?? user.displayName ?? '';
-        _emailController.text = data?['email'] ?? user.email ?? '';
-        _phoneController.text = data?['phone'] ?? '08*****';
+        email = user.email ?? 'Tidak diketahui';
+        _usernameController.text =
+            data?['username'] ?? user.displayName ?? 'Pengguna';
+        _phoneController.text = data?['phone'] ?? '';
       });
     }
   }
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final picked = await picker.pickImage(source: ImageSource.gallery);
+    final picked = await ImagePicker().pickImage(source: ImageSource.gallery);
     if (picked != null) {
       setState(() {
         _profileImage = File(picked.path);
@@ -54,42 +56,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _toggleThemeMode() {
     setState(() {
-      if (themeNotifier.value == ThemeMode.light) {
-        themeNotifier.value = ThemeMode.dark;
-      } else {
-        themeNotifier.value = ThemeMode.light;
-      }
+      themeNotifier.value =
+          themeNotifier.value == ThemeMode.light
+              ? ThemeMode.dark
+              : ThemeMode.light;
     });
-  }
-
-  Future<void> _updateProfile() async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      try {
-        // Update displayName di Firebase Auth
-        await user.updateDisplayName(_usernameController.text.trim());
-
-        // Update Firestore
-        await FirebaseFirestore.instance.collection('users').doc(user.uid).update({
-          'fullName': _usernameController.text.trim(),
-          'phone': _phoneController.text.trim(),
-        });
-
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully')),
-        );
-      } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to update profile: $e')),
-        );
-      }
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final iconColor = Theme.of(context).iconTheme.color;
+    final iconColor = isDark ? Colors.white : Colors.black;
     final textColor = isDark ? Colors.white : Colors.black;
     final screenHeight = MediaQuery.of(context).size.height;
 
@@ -98,19 +75,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
         child: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.transparent,
           elevation: 0,
           centerTitle: true,
-          title: const Text(
-            'Profile Screen',
+          title: Text(
+            'Profile',
             style: TextStyle(
-              color: Colors.black,
+              color: textColor,
               fontSize: 22,
               fontWeight: FontWeight.bold,
               letterSpacing: 1.2,
             ),
           ),
-          iconTheme: const IconThemeData(color: Colors.black),
+          iconTheme: IconThemeData(color: textColor),
         ),
       ),
       body: Stack(
@@ -118,15 +95,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(
             height: screenHeight,
             width: double.infinity,
-            child: Image.asset(
-              'assets/background.jpg',
-              fit: BoxFit.cover,
-            ),
+            child: Image.asset('assets/background.jpg', fit: BoxFit.cover),
           ),
-          Container(
-            height: screenHeight,
-            color: Colors.black.withOpacity(0.3),
-          ),
+          Container(height: screenHeight, color: Colors.black.withOpacity(0.3)),
           SingleChildScrollView(
             padding: const EdgeInsets.only(top: 120, bottom: 40),
             child: Column(
@@ -137,9 +108,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     CircleAvatar(
                       radius: 70,
-                      backgroundImage: _profileImage != null
-                          ? FileImage(_profileImage!)
-                          : const AssetImage('assets/profile.jpg') as ImageProvider,
+                      backgroundImage:
+                          _profileImage != null
+                              ? FileImage(_profileImage!)
+                              : const AssetImage('assets/profile.jpg')
+                                  as ImageProvider,
                     ),
                     Positioned(
                       bottom: 0,
@@ -149,7 +122,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: CircleAvatar(
                           radius: 20,
                           backgroundColor: Colors.white,
-                          child: Icon(Icons.camera_alt, size: 20, color: Colors.black),
+                          child: Icon(
+                            Icons.camera_alt,
+                            size: 20,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
@@ -160,64 +137,91 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   margin: const EdgeInsets.symmetric(horizontal: 20),
                   padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: isDark ? Colors.grey[900]!.withOpacity(0.9) : Colors.white.withOpacity(0.9),
+                    color:
+                        isDark
+                            ? Colors.grey[900]!.withOpacity(0.9)
+                            : Colors.white.withOpacity(0.9),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      buildEditableField('Username', _usernameController, textColor),
+                      buildEditableField(
+                        'Username',
+                        _usernameController,
+                        textColor,
+                      ),
                       const SizedBox(height: 10),
-                      buildEditableEmailField('Email', _emailController, textColor),
+                      buildInfoField('Email', email, textColor),
                       const SizedBox(height: 10),
                       buildEditableField('Phone', _phoneController, textColor),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: ElevatedButton(
-                          onPressed: _updateProfile,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                          ),
-                          child: const Text('Update Profile'),
-                        ),
-                      ),
                       const SizedBox(height: 30),
+
                       ListTile(
                         leading: Icon(Icons.confirmation_num, color: iconColor),
-                        title: Text('My Ticket', style: TextStyle(color: textColor)),
+                        title: Text(
+                          'My Ticket',
+                          style: TextStyle(color: textColor),
+                        ),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const TicketScreen()),
+                            MaterialPageRoute(
+                              builder:
+                                  (_) => const TicketScreen(
+                                    museums: [],
+                                    museumName: '',
+                                  ),
+                            ),
                           );
                         },
                       ),
                       ListTile(
                         leading: Icon(Icons.favorite, color: iconColor),
-                        title: Text('Favorites', style: TextStyle(color: textColor)),
+                        title: Text(
+                          'Favorites',
+                          style: TextStyle(color: textColor),
+                        ),
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (_) => const FavoriteScreen()),
+                            MaterialPageRoute(
+                              builder: (_) => const FavoriteScreen(),
+                            ),
                           );
                         },
                       ),
+
                       const SizedBox(height: 20),
                       Center(
                         child: ElevatedButton(
                           onPressed: () async {
                             await FirebaseAuth.instance.signOut();
-                            Navigator.pop(context); // Logout
+                            if (context.mounted) {
+                              Navigator.of(
+                                context,
+                              ).popUntil((route) => route.isFirst);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(255, 174, 139, 49),
-                            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                            backgroundColor: const Color.fromARGB(
+                              255,
+                              174,
+                              139,
+                              49,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 32,
+                              vertical: 12,
+                            ),
                           ),
-                          child: const Text('Log Out', style: TextStyle(color: Colors.white)),
+                          child: const Text(
+                            'Log Out',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
                       ),
+
                       const SizedBox(height: 20),
                       Center(
                         child: ElevatedButton.icon(
@@ -225,7 +229,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             isDark ? Icons.light_mode : Icons.dark_mode,
                             color: iconColor,
                           ),
-                          label: Text(isDark ? 'Light Mode' : 'Dark Mode', style: TextStyle(color: textColor)),
+                          label: Text(
+                            isDark ? 'Light Mode' : 'Dark Mode',
+                            style: TextStyle(color: textColor),
+                          ),
                           onPressed: _toggleThemeMode,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blueGrey,
@@ -244,37 +251,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget buildEditableField(String label, TextEditingController controller, Color textColor) {
+  Widget buildEditableField(
+    String label,
+    TextEditingController controller,
+    Color textColor,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor)),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: textColor,
+          ),
+        ),
         const SizedBox(height: 4),
         TextField(
           controller: controller,
           style: TextStyle(color: textColor),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: textColor),
+            ),
           ),
         ),
       ],
     );
   }
 
-  Widget buildEditableEmailField(String label, TextEditingController controller, Color textColor) {
+  Widget buildInfoField(String label, String value, Color textColor) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: textColor)),
-        const SizedBox(height: 4),
-        TextField(
-          controller: controller,
-          style: TextStyle(color: textColor),
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+        Text(
+          label,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 14,
+            color: textColor,
           ),
-          readOnly: true, // Email hanya bisa dibaca, tidak bisa diubah
         ),
+        const SizedBox(height: 4),
+        Text(value, style: TextStyle(fontSize: 16, color: textColor)),
       ],
     );
   }

@@ -24,6 +24,7 @@ class MuseumService {
         mapsUrl: museumData['maps_url'] ?? '',
         openHours: museumData['open_hours'] ?? '',
         collections: collections,
+        imgMuseum: '',
       );
 
       museums.add(museum);

@@ -1,9 +1,10 @@
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
+import 'dart:convert';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:museglo/screens/Homescreen.dart';
 import 'package:museglo/screens/search_screen.dart';
 import 'package:museglo/screens/profile_screen.dart';
@@ -16,13 +17,20 @@ class PostImagePage extends StatefulWidget {
 }
 
 class _PostImagePageState extends State<PostImagePage> {
-  File? _image;
+  Uint8List? _imageBytes; // untuk image yang dipilih
+  String? _imageUrl;
   final TextEditingController _descController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _artistController = TextEditingController();
+  final TextEditingController _yearController = TextEditingController();
+
   bool _isPosting = false;
   bool _isPosted = false;
 
   String? _selectedMuseumId;
   List<Map<String, dynamic>> _museums = [];
+
+  int _currentIndex = 2;
 
   @override
   void initState() {
@@ -31,14 +39,19 @@ class _PostImagePageState extends State<PostImagePage> {
   }
 
   Future<void> fetchMuseums() async {
-    final snapshot = await FirebaseFirestore.instance.collection('museums').get();
+    final snapshot =
+        await FirebaseFirestore.instance.collection('museums').get();
     setState(() {
-      _museums = snapshot.docs
-          .map((doc) => {
-                'id': doc.id,
-                'name': doc['name'] ?? 'Museum Tanpa Nama',
-              })
-          .toList();
+      _museums =
+          snapshot.docs
+              .map(
+                (doc) => {
+                  'id': doc.id,
+                  'name': doc['name'] ?? 'Museum Tanpa Nama',
+                },
+              )
+              .toList();
+
       if (_museums.isNotEmpty) {
         _selectedMuseumId = _museums.first['id'];
       }
@@ -46,62 +59,90 @@ class _PostImagePageState extends State<PostImagePage> {
   }
 
   Future<void> _pickImage() async {
-    final pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (pickedFile != null) {
+    final picker = ImagePicker();
+    final picked = await picker.pickImage(source: ImageSource.gallery);
+
+    if (picked != null) {
+      final bytes = await picked.readAsBytes();
       setState(() {
-        _image = File(pickedFile.path);
+        _imageBytes = bytes;
       });
     }
   }
 
+  Future<String> _uploadImage() async {
+    final fileName = DateTime.now().millisecondsSinceEpoch.toString();
+    final storageRef = FirebaseStorage.instance.ref().child(
+      'uploads/$fileName.jpg',
+    );
+
+    UploadTask uploadTask = storageRef.putData(
+      _imageBytes!,
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
+    final snapshot = await uploadTask;
+    return await snapshot.ref.getDownloadURL();
+  }
+
   Future<void> _postImage() async {
-    if (_image == null || _descController.text.trim().isEmpty || _selectedMuseumId == null) return;
+    if (_imageBytes == null ||
+        _descController.text.trim().isEmpty ||
+        _selectedMuseumId == null)
+      return;
 
     setState(() {
       _isPosting = true;
+      _isPosted = false;
     });
 
     try {
-      // Upload gambar ke Firebase Storage
-      String imageUrl = '';
-      if (_image != null) {
-        final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-        final storageRef = FirebaseStorage.instance.ref().child('collections/$fileName.jpg');
-        await storageRef.putFile(_image!);
-        imageUrl = await storageRef.getDownloadURL();
-      }
+      // Upload image ke Firebase Storage dulu
+      _imageUrl = await _uploadImage();
 
-      final ref = FirebaseFirestore.instance.collection('museums').doc(_selectedMuseumId);
+      // Simpan data ke Firestore
+      final ref = FirebaseFirestore.instance
+          .collection('museums')
+          .doc(_selectedMuseumId);
 
       await ref.collection('collections').add({
-        'title': 'New Artwork',
-        'artist': FirebaseAuth.instance.currentUser?.displayName ?? 'Unknown',
-        'year': DateTime.now().year.toString(),
-        'description': _descController.text,
-        'imageUrl': imageUrl, // Simpan url gambar hasil upload
+        'title':
+            _titleController.text.trim().isNotEmpty
+                ? _titleController.text.trim()
+                : 'Untitled',
+        'artist':
+            _artistController.text.trim().isNotEmpty
+                ? _artistController.text.trim()
+                : FirebaseAuth.instance.currentUser?.displayName ?? 'Unknown',
+        'year':
+            _yearController.text.trim().isNotEmpty
+                ? _yearController.text.trim()
+                : DateTime.now().year.toString(),
+        'description': _descController.text.trim(),
+        'imageUrl': _imageUrl ?? '',
       });
 
       setState(() {
         _isPosted = true;
-        _image = null;
+        _imageBytes = null;
         _descController.clear();
+        _titleController.clear();
+        _artistController.clear();
+        _yearController.clear();
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Koleksi berhasil ditambahkan!')),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Gagal menambahkan koleksi: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Gagal menambahkan koleksi: $e')));
     } finally {
       setState(() {
         _isPosting = false;
       });
     }
   }
-
-  int _currentIndex = 2;
 
   void _onBottomNavTapped(int index) {
     if (index == _currentIndex) return;
@@ -116,10 +157,8 @@ class _PostImagePageState extends State<PostImagePage> {
     } else if (index == 1) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => SearchingPage()),
+        MaterialPageRoute(builder: (_) => const SearchingPage()),
       );
-    } else if (index == 2) {
-      // Stay on Post
     } else if (index == 3) {
       Navigator.pushReplacement(
         context,
@@ -131,173 +170,177 @@ class _PostImagePageState extends State<PostImagePage> {
   @override
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
-    final appBarBg = isDark ? Colors.black : Colors.white;
-    final appBarText = isDark ? Colors.white : Colors.black;
-    final appBarIcon = isDark ? Colors.white : Colors.black;
+    final bgColor = isDark ? Colors.black : Colors.white;
+    final cardColor = isDark ? Colors.grey[900] : Colors.white.withOpacity(0.9);
+    final textColor = isDark ? Colors.white : Colors.black;
 
-    final isPostEnabled = _image != null &&
+    final isPostEnabled =
+        _imageBytes != null &&
         _descController.text.trim().isNotEmpty &&
         !_isPosting &&
         _selectedMuseumId != null;
 
     return Scaffold(
-      extendBodyBehindAppBar: true,
+      backgroundColor: bgColor,
       appBar: AppBar(
-        backgroundColor: appBarBg,
+        backgroundColor: bgColor,
         elevation: 0,
-        title: Text(
-          'Post Image',
-          style: TextStyle(color: appBarText),
-        ),
         centerTitle: true,
-        iconTheme: IconThemeData(color: appBarIcon),
+        title: Text('Post Image', style: TextStyle(color: textColor)),
+        iconTheme: IconThemeData(color: textColor),
       ),
-      body: Stack(
-        children: [
-          // Background image
-          SizedBox.expand(
-            child: Image.asset(
-              'assets/background.jpg',
-              fit: BoxFit.cover,
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            DropdownButtonFormField<String>(
+              value: _selectedMuseumId,
+              decoration: InputDecoration(
+                filled: true,
+                fillColor: cardColor,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              dropdownColor: cardColor,
+              style: TextStyle(color: textColor),
+              items:
+                  _museums.map<DropdownMenuItem<String>>((museum) {
+                    return DropdownMenuItem<String>(
+                      value: museum['id'] as String,
+                      child: Text(
+                        museum['name'] as String,
+                        style: TextStyle(color: textColor),
+                      ),
+                    );
+                  }).toList(),
+              onChanged: (value) => setState(() => _selectedMuseumId = value),
             ),
-          ),
-          // Overlay (optional, biar konten lebih jelas)
-          Container(
-            color: Colors.black.withOpacity(0.3),
-          ),
-          // Konten utama
-          Center(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Dropdown pilih museum
-                  Container(
-                    width: double.infinity,
-                    margin: const EdgeInsets.only(bottom: 16),
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: DropdownButton<String>(
-                      value: _selectedMuseumId,
-                      isExpanded: true,
-                      underline: Container(),
-                      hint: const Text('Pilih Museum'),
-                      items: _museums
-                          .map((museum) => DropdownMenuItem<String>(
-                                value: museum['id'],
-                                child: Text(museum['name']),
-                              ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          _selectedMuseumId = value;
-                        });
-                      },
+            const SizedBox(height: 12),
+            _buildTextField(_titleController, 'Title...', isDark),
+            _buildTextField(_artistController, 'Artist...', isDark),
+            _buildTextField(
+              _yearController,
+              'Year...',
+              isDark,
+              inputType: TextInputType.number,
+            ),
+            const SizedBox(height: 12),
+            ElevatedButton(
+              onPressed: _pickImage,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: isDark ? Colors.grey[700] : Colors.blue,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('+ IMAGE'),
+            ),
+            const SizedBox(height: 20),
+            _imageBytes != null
+                ? ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.memory(
+                    _imageBytes!,
+                    height: 180,
+                    fit: BoxFit.cover,
+                  ),
+                )
+                : Container(
+                  height: 180,
+                  decoration: BoxDecoration(
+                    color: cardColor,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: Center(
+                    child: Text(
+                      'No Image Selected',
+                      style: TextStyle(color: textColor),
                     ),
                   ),
-                  ElevatedButton(
-                    onPressed: _pickImage,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.9),
-                      foregroundColor: Colors.black,
-                    ),
-                    child: const Text('+ IMAGE'),
-                  ),
-                  const SizedBox(height: 20),
-                  _image != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: Image.file(
-                            _image!,
-                            width: double.infinity,
-                            height: 180,
-                            fit: BoxFit.cover,
+                ),
+            const SizedBox(height: 20),
+            _buildTextField(
+              _descController,
+              'Description...',
+              isDark,
+              maxLines: null,
+            ),
+            const SizedBox(height: 24),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: isPostEnabled ? _postImage : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isPostEnabled ? Colors.blue : Colors.grey,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                ),
+                child:
+                    _isPosting
+                        ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
                           ),
                         )
-                      : Container(
-                          width: double.infinity,
-                          height: 180,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.8),
-                            border: Border.all(color: Colors.blue, width: 2),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: const Center(
-                            child: Text('No Image Selected'),
-                          ),
-                        ),
-                  const SizedBox(height: 20),
-                  Container(
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.85),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: TextField(
-                      controller: _descController,
-                      maxLines: null,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: const InputDecoration(
-                        hintText: 'Desc...',
-                        border: InputBorder.none,
-                        contentPadding: EdgeInsets.all(10),
-                      ),
-                      onChanged: (_) => setState(() {}),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: isPostEnabled ? _postImage : null,
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isPostEnabled
-                            ? Colors.blue
-                            : Colors.grey,
-                        foregroundColor: Colors.white,
-                      ),
-                      child: _isPosting
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
-                              ),
-                            )
-                          : const Text('Post'),
-                    ),
-                  ),
-                  if (_isPosted)
-                    const Padding(
-                      padding: EdgeInsets.only(top: 12),
-                      child: Text(
-                        'Koleksi berhasil ditambahkan!',
-                        style: TextStyle(color: Colors.green),
-                      ),
-                    ),
-                ],
+                        : const Text('Post', style: TextStyle(fontSize: 16)),
               ),
             ),
-          ),
-        ],
+            if (_isPosted)
+              const Padding(
+                padding: EdgeInsets.only(top: 12),
+                child: Text(
+                  'Koleksi berhasil ditambahkan!',
+                  style: TextStyle(color: Colors.green),
+                ),
+              ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
-        backgroundColor: Colors.grey[300],
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.black54,
         onTap: _onBottomNavTapped,
+        selectedItemColor: isDark ? Colors.blue[300] : Colors.blue,
+        unselectedItemColor: Colors.grey,
+        backgroundColor: isDark ? Colors.black : Colors.grey[200],
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.add_circle_outline), label: 'Post'),
+          BottomNavigationBarItem(icon: Icon(Icons.add), label: 'Post'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+    TextEditingController controller,
+    String hint,
+    bool isDark, {
+    TextInputType? inputType,
+    int? maxLines,
+  }) {
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: isDark ? Colors.grey[800] : Colors.white,
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TextField(
+        controller: controller,
+        keyboardType: inputType,
+        maxLines: maxLines ?? 1,
+        style: TextStyle(color: isDark ? Colors.white : Colors.black),
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(color: isDark ? Colors.white54 : Colors.black54),
+          border: InputBorder.none,
+          contentPadding: const EdgeInsets.all(12),
+        ),
+        onChanged: (_) => setState(() {}),
       ),
     );
   }

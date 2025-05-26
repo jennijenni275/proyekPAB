@@ -2,51 +2,52 @@
   "museums": [
     {
       "name": "The Louvre Museum",
+      "img_museum": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwnANzuVH_8-SymVXAnDyLAfQlWQKudqv5xABsJpQ94c0QhFbj3jLDU8su&s=10",
       "location": "Paris, France",
-      "maps_url": "https://www.google.com/maps/place/Museum+Louvre/@48.8606109,2.3355587,17z/data=!3m1!5s0x47f112d46c2f6eef:0xfb8a933f53aec2c6!4m14!1m7!3m6!1s0x47e671d877937b0f:0xb975fcfa192f84d4!2sMuseum+Louvre!8m2!3d48.8606111!4d2.337644!16zL20vMDRnZHI!3m5!1s0x47e671d877937b0f:0xb975fcfa192f84d4!8m2!3d48.8606111!4d2.337644!16zL20vMDRnZHI?entry=ttu&g_ep=EgoyMDI1MDUxMy4xIKXMDSoASAFQAw%3D%3D",
+      "maps_url": "https://www.google.com/maps/place/Museum+Louvre/@48.8606111,2.337644,17z/data=!3m2!4b1!5s0x47f112d46c2f6eef:0xfb8a933f53aec2c6!4m6!3m5!1s0x47e671d877937b0f:0xb975fcfa192f84d4!8m2!3d48.8606111!4d2.337644!16zL20vMDRnZHI?entry=ttu&g_ep=EgoyMDI1MDUyMS4wIKXMDSoASAFQAw%3D%3D",
       "open_hours": "Monday, Thursday, Saturday, Sunday: 9:00 AM – 6:00 PM; Wednesday, Friday: 9:00 AM – 9:45 PM; Closed Tuesday",
       "collections": [
-        {
-          "title": "Mona Lisa",
-          "artist": "Leonardo da Vinci",
-          "year": "1503",
-          "description": "Lukisan potret terkenal dengan senyum misterius.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg"
-        },
         {
           "title": "Venus de Milo",
           "artist": "Alexandros of Antioch",
           "year": "130–100 BC",
           "description": "Patung dewi cinta dari Yunani kuno.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Venus_de_Milo_Louvre_Ma399_n4.jpg"
+          "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAyS-wjw-0K39ojI6xRNsusUKP73OgCaz9b0v5T4Ylpv0JTk4FQ4kxLtTw&s=10"
         },
         {
           "title": "Liberty Leading the People",
           "artist": "Eugène Delacroix",
           "year": "1830",
           "description": "Simbol revolusi Prancis dengan wanita membawa bendera.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/34/Eug%C3%A8ne_Delacroix_-_Le_28_Juillet._La_Libert%C3%A9_guidant_le_peuple.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg/1200px-La_Libert%C3%A9_guidant_le_peuple_-_Eug%C3%A8ne_Delacroix_-_Mus%C3%A9e_du_Louvre_Peintures_RF_129_-_apr%C3%A8s_restauration_2024.jpg"
         },
-        {
+{
+          "title": "Mona Lisa",
+          "artist": "Leonardo da Vinci",
+          "year": "1503",
+          "description": "Lukisan potret terkenal dengan senyum misterius.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Mona_Lisa.jpg"
+        }, {
           "title": "The Raft of the Medusa",
           "artist": "Théodore Géricault",
           "year": "1819",
           "description": "Lukisan tragedi kapal karam Medusa.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Th%C3%A9odore_G%C3%A9ricault_-_Le_Radeau_de_La_M%C3%A9duse.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/12/Raft_of_the_Medusa.jpg"
         },
         {
           "title": "The Coronation of Napoleon",
           "artist": "Jacques-Louis David",
           "year": "1807",
           "description": "Napoleon menobatkan dirinya sebagai kaisar.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9c/Jacques-Louis_David_-_The_Coronation_of_Napoleon_%281805-1807%29.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/Jacques-Louis_David%2C_The_Coronation_of_Napoleon_edit.jpg/1024px-Jacques-Louis_David%2C_The_Coronation_of_Napoleon_edit.jpg"
         }
       ]
     },
     {
       "name": "The British Museum",
+      "img_museum": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTECocPdOwNeag9HsxlOTzXw5vCXMSUssrF8BKgWeJhIMbXCJ8bQ8U7FRoH&s=10",
       "location": "London, United Kingdom",
-      "maps_url": "https://www.google.com/maps/place/British+Museum/@51.5194133,-0.1269566,17z/data=!3m1!4b1!4m6!3m5!1s0x48761b323093d307:0x2fb199016d5642a7!8m2!3d51.5194133!4d-0.1269566!16zL20vMDFoYjM?entry=ttu&g_ep=EgoyMDI1MDUxMy4xIKXMDSoASAFQAw%3D%3D",
+      "maps_url": "https://www.google.com/maps/place/British+Museum/@51.5194133,-0.1269566,17z/data=!3m1!4b1!4m6!3m5!1s0x48761b323093d307:0x2fb199016d5642a7!8m2!3d51.5194133!4d-0.1269566!16zL20vMDFoYjM?entry=ttu&g_ep=EgoyMDI1MDUyMS4wIKXMDSoASAFQAw%3D%3D",
       "open_hours": "Daily: 10:00 AM – 5:00 PM; Fridays: Open until 8:30 PM",
       "collections": [
         {
@@ -54,42 +55,43 @@
           "artist": "Ancient Egypt",
           "year": "196 BC",
           "description": "Batu penting dalam penerjemahan hieroglif Mesir.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Rosetta_Stone.JPG"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/Rosetta_Stone.JPG/1200px-Rosetta_Stone.JPG"
         },
         {
           "title": "Elgin Marbles",
           "artist": "Phidias (atribusi)",
           "year": "447–438 BC",
           "description": "Patung Yunani dari Parthenon.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Elgin_Marbles_in_the_British_Museum.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/23/Elgin-marbles-jan-2024.jpg"
         },
-        {
+{
           "title": "The Lewis Chessmen",
           "artist": "Unknown Norse craftsman",
           "year": "12th century",
           "description": "Set catur dari abad pertengahan yang ditemukan di Skotlandia.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/03/Lewis_Chessmen_British_Museum.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/NMSLewisChessmen29.jpg/1200px-NMSLewisChessmen29.jpg"
         },
         {
           "title": "Assyrian Lion Hunt Reliefs",
           "artist": "Assyrian Empire",
           "year": "7th century BC",
           "description": "Relief dari perburuan singa kerajaan di Assyria.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Lion_Hunt_of_Ashurbanipal.jpg"
+          "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-NOccdAZKftcsqrEhbuEKPGyIquybfoUETw&s"
         },
         {
           "title": "Sutton Hoo Helmet",
           "artist": "Anglo-Saxon",
           "year": "7th century",
           "description": "Helm kerajaan dari makam kuno di Inggris.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Sutton_Hoo_helmet_2016.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/2004_sutton_hoo_01.JPG/250px-2004_sutton_hoo_01.JPG"
         }
       ]
     },
     {
       "name": "The Metropolitan Museum of Art",
+      "img_museum": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/30/Metropolitan_Museum_of_Art_%28The_Met%29_-_Central_Park%2C_NYC.jpg/960px-Metropolitan_Museum_of_Art_%28The_Met%29_-_Central_Park%2C_NYC.jpg",
       "location": "New York, USA",
-      "maps_url": "https://www.google.com/maps/place/Metropolitan+Museum+of+Art/@40.7794366,-73.963244,17z/data=!3m1!4b1!4m6!3m5!1s0x89c25896f660c26f:0x3b2fa4f4b6c6a1fa!8m2!3d40.7794366!4d-73.963244!16zL20vMDljN2I?entry=ttu&g_ep=EgoyMDI1MDUxMy4xIKXMDSoASAFQAw%3D%3D",
+      "maps_url": "https://www.google.com/maps/place/Metropolitan+Museum+of+Art/@40.7794366,-73.9658189,17z/data=!3m1!4b1!4m6!3m5!1s0x89c25896f660c26f:0x3b2fa4f4b6c6a1fa!8m2!3d40.7794366!4d-73.963244!16zL20vMDljN2I?entry=ttu&g_ep=EgoyMDI1MDUyMS4wIKXMDSoASAFQAw%3D%3D",
       "open_hours": "Sunday–Tuesday, Thursday: 10:00 AM – 5:00 PM; Friday & Saturday: 10:00 AM – 9:00 PM; Closed Wednesday",
       "collections": [
         {
@@ -97,42 +99,44 @@
           "artist": "Emanuel Leutze",
           "year": "1851",
           "description": "Lukisan George Washington menyeberangi sungai.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Washington_Crossing_the_Delaware_by_Emanuel_Leutze%2C_MMA-NYC%2C_1851.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/Washington_Crossing_the_Delaware_by_Emanuel_Leutze%2C_MMA-NYC%2C_1851.jpg/960px-Washington_Crossing_the_Delaware_by_Emanuel_Leutze%2C_MMA-NYC%2C_1851.jpg"
         },
-        {
+
+{
           "title": "Madonna and Child",
           "artist": "Duccio di Buoninsegna",
           "year": "1300",
           "description": "Lukisan religius dari Italia abad pertengahan.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/0/05/Duccio_Madonna_and_Child_Metropolitan.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Duccio_Di_Buoninsegna_-_Madonna_col_Bambino.jpg/960px-Duccio_Di_Buoninsegna_-_Madonna_col_Bambino.jpg"
         },
         {
           "title": "Armor of Henry II of France",
           "artist": "French Royal Workshop",
           "year": "1555",
           "description": "Baju zirah dekoratif milik raja Prancis.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/13/Armor_of_Henry_II_of_France_MET_04.3.206.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/65/Armor_of_Henry_II%2C_King_of_France_%28reigned_1547%E2%80%9359%29_MET_DP256960.jpg"
         },
         {
           "title": "Temple of Dendur",
           "artist": "Ancient Egypt",
           "year": "circa 15 BC",
           "description": "Kuil Mesir kuno yang dipindahkan ke New York.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/f0/Temple_of_Dendur_MET.jpg"
+          "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBn8Bihe2KE0vf03W1Odq9TMXDaIBSjMBGx9OjjVnN1jqUucMKxL4ivSbv&s=10"
         },
         {
           "title": "Autumn Rhythm",
           "artist": "Jackson Pollock",
           "year": "1950",
           "description": "Karya abstrak terkenal dari Pollock.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/en/1/19/Autumn_Rhythm_%28Number_30%29.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/en/f/fa/Autumn_Rhythm.jpg"
         }
       ]
     },
     {
       "name": "Museum Nasional Indonesia",
       "location": "Jakarta, Indonesia",
-      "maps_url": "https://www.google.com/maps/place/Museum+Nasional+Indonesia/@-6.1764021,106.8215901,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f5d4b571f28b:0xa41541566f6058ed!8m2!3d-6.1764021!4d106.8215901!16s%2Fm%2F027vccr?entry=ttu&g_ep=EgoyMDI1MDUxMy4xIKXMDSoASAFQAw%3D%3D",
+      "img_museum": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Museum_Nasional_Indonesia.jpg/640px-Museum_Nasional_Indonesia.jpg",
+      "maps_url": "https://www.google.com/maps/place/Museum+Nasional+Indonesia/@-6.1764021,106.8190152,17z/data=!3m1!4b1!4m6!3m5!1s0x2e69f5d4b571f28b:0xa41541566f6058ed!8m2!3d-6.1764021!4d106.8215901!16s%2Fm%2F027vccr?entry=ttu&g_ep=EgoyMDI1MDUyMS4wIKXMDSoASAFQAw%3D%3D",
       "open_hours": "Tuesday–Sunday: 8:00 AM – 4:00 PM; Closed Monday",
       "collections": [
         {
@@ -140,42 +144,157 @@
           "artist": "Kerajaan Melayu",
           "year": "13th century",
           "description": "Patung dewa dari batu granit setinggi 4 meter.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/1d/Bhairawa_statue_National_Museum_of_Indonesia.jpg"
+          "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSXdJrHO9Sfd1Fnxdot6bw1BN5mT1Jchvl_uQ2vCNqWSEK6-gaigb-a6lvn&s=10"
         },
         {
           "title": "Arca Buddha Dipangkara",
           "artist": "Unknown",
           "year": "8th century",
           "description": "Arca Buddha dari masa Sriwijaya.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/28/Dipankara_Buddha%2C_National_Museum_of_Indonesia.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/id/thumb/e/e9/Arca_Buddha_Dipangkara.jpg/250px-Arca_Buddha_Dipangkara.jpg"
         },
-        {
+
+{
           "title": "Naskah Kuno Lontar",
           "artist": "Kerajaan Bali",
           "year": "18th century",
           "description": "Naskah suci ditulis di atas daun lontar.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Lontar_script.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Christian_prayers_in_tamil_on_palm_leaves.jpg"
         },
         {
           "title": "Topeng Cirebon",
           "artist": "Seniman lokal Jawa Barat",
           "year": "19th century",
           "description": "Topeng tradisional dari budaya Cirebon.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Cirebonese_mask_dance.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/id/e/e0/Reynan-Topeng-waryo-topengcirebon.jpg"
         },
         {
           "title": "Keris Luk 13",
           "artist": "Empu Nusantara",
           "year": "14th century",
           "description": "Senjata tradisional dengan ukiran magis.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/60/Keris_13_luk.jpg"
+          "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTU8RdbMbA5LpTwmLizy0oFMkS64_LuHD1CruiV8Qb82orOQxaA9VecMJKh&s=10"
         }
       ]
     },
+
+{
+  "name": "National Museum of Korea",
+  "location": "Seoul, South Korea",
+ "img_museum": "https://upload.wikimedia.org/wikipedia/commons/1/13/National_Museum_of_Korea.jpg",
+  "maps_url": "https://www.google.com/maps/place/Museum+Nasional+Korea/@37.5238506,126.9804702,17z/data=!3m1!4b1!4m6!3m5!1s0x357ca2ed7e746c37:0x616286c7a66e50e7!8m2!3d37.5238506!4d126.9804702!16zL20vMGN6emN3?entry=ttu&g_ep=EgoyMDI1MDUyMS4wIKXMDSoASAFQAw%3D%3D",
+  "open_hours": "Tuesday–Sunday: 10:00 AM – 6:00 PM; Saturday extended to 9:00 PM",
+  "collections": [
+    {
+      "title": "Pensive Bodhisattva",
+      "artist": "Silla Kingdom",
+      "year": "6th century",
+      "description": "Patung perunggu ikonik dari era Silla, dalam pose kontemplatif.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6a/Pensive_Bodhisattva_01.jpg"
+    },
+    {
+      "title": "Ten-Story Pagoda from Gyeongcheonsa Temple Site",
+      "artist": "Goryeo Dynasty",
+      "year": "1348",
+      "description": "Pagoda batu marmer indah dengan ukiran rumit.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/c1/Korea-Seoul-National_Museum_Gyeongcheonsa_Pagoda_0187%268-06.jpg "
+    },
+    {
+      "title": "Gold Crown",
+      "artist": "Silla Kingdom",
+      "year": "5th century",
+      "description": "Mahkota emas mewah yang ditemukan di Gyeongju.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Korea-Seoul.National.Museum-Silla-Crown-01.jpg/250px-Korea-Seoul.National.Museum-Silla-Crown-01.jpg"
+    }
+  ]
+},
+{
+  "name": "Uffizi Gallery",
+  "location": "Florence, Italy",
+ "img_museum": "https://upload.wikimedia.org/wikipedia/commons/d/d7/Florence%2C_Italy_-_panoramio_%28125%29.jpg",
+  "maps_url": "https://www.google.com/maps/place/Uffizi/@43.7677856,11.2553108,17z/data=!3m1!4b1!4m6!3m5!1s0x132a54008dc59081:0xcddeb7c89bf0c4cd!8m2!3d43.7677856!4d11.2553108!16zL20vMGNmanA?entry=ttu&g_ep=EgoyMDI1MDUyMS4wIKXMDSoASAFQAw%3D%3D",
+  "open_hours": "Tuesday–Sunday: 8:15 AM – 6:30 PM",
+  "collections": [
+    {
+      "title": "Annunciation",
+      "artist": "Leonardo da Vinci",
+      "year": "1472–1475",
+      "description": "Pengumuman kepada Maria tentang kelahiran Yesus.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Fra_Angelico_-_Annunciation.jpg"
+    },
+    {
+      "title": "Medusa",
+      "artist": "Caravaggio",
+      "year": "1597",
+      "description": "Representasi kepala Medusa yang dipotong.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d3/Medusa_by_Carvaggio.jpg"
+    },
+    {
+      "title": "Primavera",
+      "artist": "Sandro Botticelli",
+      "year": "1482",
+      "description": "Lukisan alegoris musim semi dengan figur mitologi.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Sandro_Botticelli_-_La_Primavera_-_Google_Art_Project.jpg/2560px-Sandro_Botticelli_-_La_Primavera_-_Google_Art_Project.jpg"
+    },
+    {
+      "title": "Doni Tondo",
+      "artist": "Michelangelo",
+      "year": "1507",
+      "description": "Lukisan keluarga suci berbentuk bundar.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Tondo_Doni%2C_por_Miguel_%C3%81ngel.jpg/1200px-Tondo_Doni%2C_por_Miguel_%C3%81ngel.jpg"
+    }
+  ]
+},
+
+{
+  "name": "Tokyo National Museum",
+  "location": "Tokyo, Japan",
+   "img_museum": "https://upload.wikimedia.org/wikipedia/commons/a/a5/Tokyo_National_Museum%2C_Honkan_2010.jpg",
+  "maps_url": "https://www.google.com/maps/place/Museum+Nasional+Tokyo/@35.7188351,139.7765215,17z/data=!3m2!4b1!5s0x60188e83526c6cb9:0x4efc1e737b7cad1a!4m6!3m5!1s0x60188e8314d77d11:0x232fd618bd4977dd!8m2!3d35.7188351!4d139.7765215!16zL20vMDVzazVn?entry=ttu&g_ep=EgoyMDI1MDUyMS4wIKXMDSoASAFQAw%3D%3D",
+  "open_hours": "Tuesday–Sunday: 9:30 AM – 5:00 PM",
+  "collections": [
+    {
+      "title": "The Wind God and Thunder God",
+      "artist": "Tawaraya Sōtatsu",
+      "year": "17th century",
+      "description": "Lukisan layar emas menggambarkan dewa angin dan petir.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Wind_God_and_Thunder_God_Screens_by_Ogata_Korin.png"
+    },
+    {
+      "title": "Great Buddha of Kamakura (Replica)",
+      "artist": "Kamakura Period",
+      "year": "1252",
+      "description": "Replika patung Buddha perunggu terkenal di Kamakura.",
+      "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHb3svqRIIg2v9-tl4ZkVFWtdyyPjpuJtENJoPqsaDYhQOioN4k4SQmbc&s=10"
+    },
+    {
+      "title": "Armor of the Tokugawa Clan",
+      "artist": "Edo Period",
+      "year": "17th century",
+      "description": "Baju zirah samurai milik klan Tokugawa.",
+      "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAeobR3a2OjI5HXyFg3pOpVJRv-ZhoeUdZu4RVLVMEhgRGMyzGxJ5NQRd9&s=10"
+    },
+    {
+      "title": "Haniwa Figure",
+      "artist": "Kofun Period",
+      "year": "6th century",
+      "description": "Patung tanah liat yang digunakan sebagai pelengkap makam.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Haniwa_Figure_of_a_Shamaness_79.278.1.jpg/250px-Haniwa_Figure_of_a_Shamaness_79.278.1.jpg"
+    },
+    {
+      "title": "Scroll of the Tale of Genji",
+      "artist": "Heian Period",
+      "year": "12th century",
+      "description": "Salah satu ilustrasi tertua dari karya sastra klasik Jepang.",
+      "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Genji_emaki_azumaya.jpg"
+    }
+  ]
+},
     {
       "name": "Rijksmuseum",
       "location": "Amsterdam, Netherlands",
-      "maps_url": "https://www.google.com/maps/place/Rijksmuseum/@52.3599976,4.8852188,17z/data=!3m1!4b1!4m6!3m5!1s0x47c609eec1bb16e5:0xd54373ae6a408585!8m2!3d52.3599976!4d4.8852188!16zL20vMDZqc2Y?entry=ttu&g_ep=EgoyMDI1MDUxMy4xIKXMDSoASAFQAw%3D%3D",
+      "img_museum": "https://upload.wikimedia.org/wikipedia/commons/8/80/South_facade_of_the_Rijksmuseum_Amsterdam_%28DSCF0528%29.jpg",
+      "maps_url": "https://www.google.com/maps/place/Rijksmuseum/@52.3599976,4.8826439,17z/data=!3m1!4b1!4m6!3m5!1s0x47c609eec1bb16e5:0xd54373ae6a408585!8m2!3d52.3599976!4d4.8852188!16zL20vMDZqc2Y?entry=ttu&g_ep=EgoyMDI1MDUyMS4wIKXMDSoASAFQAw%3D%3D",
       "open_hours": "Daily: 9:00 AM – 5:00 PM",
       "collections": [
         {
@@ -183,35 +302,36 @@
           "artist": "Rembrandt van Rijn",
           "year": "1642",
           "description": "Karya besar Rembrandt yang menggambarkan penjaga kota.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/26/The_Nightwatch_by_Rembrandt.jpg"
-        },
-        {
-          "title": "The Milkmaid",
-          "artist": "Johannes Vermeer",
-          "year": "1658",
-          "description": "Wanita sedang menuang susu, penuh detail dan cahaya.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.jpg"
-        },
-        {
-          "title": "Self-portrait",
-          "artist": "Vincent van Gogh",
-          "year": "1887",
-          "description": "Potret diri Van Gogh dengan gaya khasnya.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/76/Vincent_van_Gogh_-_Self-portrait_with_Grey_Felt_Hat_-_Google_Art_Project.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/94/The_Nightwatch_by_Rembrandt_-_Rijksmuseum.jpg/1200px-The_Nightwatch_by_Rembrandt_-_Rijksmuseum.jpg"
         },
         {
           "title": "The Threatened Swan",
           "artist": "Jan Asselijn",
           "year": "1650",
           "description": "Lukisan simbolik seekor angsa melindungi sarangnya.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Jan_Asselijn_-_The_Threatened_Swan.jpg"
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/De_bedreigde_zwaan_Rijksmuseum_SK-A-4.jpeg/1200px-De_bedreigde_zwaan_Rijksmuseum_SK-A-4.jpeg"
+        },
+
+{
+          "title": "The Milkmaid",
+          "artist": "Johannes Vermeer",
+          "year": "1658",
+          "description": "Wanita sedang menuang susu, penuh detail dan cahaya.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.png/1200px-Johannes_Vermeer_-_Het_melkmeisje_-_Google_Art_Project.png"
+        },
+        {
+          "title": "Self-portrait",
+          "artist": "Vincent van Gogh",
+          "year": "1887",
+          "description": "Potret diri Van Gogh dengan gaya khasnya.",
+          "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b2/Vincent_van_Gogh_-_Self-Portrait_-_Google_Art_Project.jpg"
         },
         {
           "title": "Portrait of a Young Couple",
           "artist": "Frans Hals",
           "year": "1622",
           "description": "Pasangan muda dalam gaya khas Belanda.",
-          "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Frans_Hals_-_Portrait_of_a_Young_Couple.jpg"
+          "image_url": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJIHCObUXELuT74SfOOqDHejOBDxkk0T85gLKl34VcS9H08zOy5-zCDGlZ&s=10"
         }
       ]
     }

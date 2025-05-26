@@ -7,159 +7,145 @@ class GalleryInfoScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bgColor = isDark ? Colors.black : Colors.white;
-    final cardColor = isDark ? Colors.grey[800] : Colors.grey[400];
+    final cardColor = isDark ? Colors.grey[900] : Colors.grey[200];
     final textColor = isDark ? Colors.white : Colors.black;
+    final accentColor = const Color(0xFF4A90E2);
 
     return Scaffold(
       backgroundColor: bgColor,
       appBar: AppBar(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: bgColor,
         elevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: textColor),
+          onPressed: () => Navigator.pop(context),
+        ),
         centerTitle: true,
-        title: const Text(
-          'Gallery',
+        title: Text(
+          'About MuseGlo',
           style: TextStyle(
-            color: Colors.black,
+            color: textColor,
             fontWeight: FontWeight.bold,
-            fontSize: 28,
+            fontSize: 24,
           ),
         ),
-        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Container(
-          width: 320,
-          height: 540,
+          width: 340,
+          height: 580,
           margin: const EdgeInsets.symmetric(vertical: 16),
           decoration: BoxDecoration(
             color: bgColor,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              if (!isDark)
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 10,
+                  offset: Offset(0, 6),
+                ),
+            ],
           ),
           child: Scrollbar(
             thumbVisibility: true,
             thickness: 6,
             radius: const Radius.circular(8),
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+              padding: const EdgeInsets.all(16),
               children: [
-                // Open Hours
-                Card(
-                  color: cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Open Hours',
-                          style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Mon -- Fri: 9 am–5 pm\nWeekend: Close',
-                          style: TextStyle(color: textColor),
-                        ),
-                      ],
-                    ),
-                  ),
+                buildInfoCard(
+                  icon: Icons.info_outline,
+                  title: 'Tentang Aplikasi',
+                  content:
+                      'MuseGlo adalah aplikasi edukatif dan informatif yang memungkinkan pengguna untuk menjelajahi koleksi seni dari berbagai museum di dunia. Aplikasi ini dibuat sebagai bagian dari proyek mata kuliah untuk memberikan pengalaman budaya digital yang mudah diakses.',
+                  cardColor: cardColor,
+                  textColor: textColor,
                 ),
-                const SizedBox(height: 16),
-                // Tickets
-                Card(
-                  color: cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Tickets',
-                          style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Adult: 20 C\$\nChild: Free',
-                          style: TextStyle(color: textColor),
-                        ),
-                      ],
-                    ),
-                  ),
+                buildInfoCard(
+                  icon: Icons.date_range,
+                  title: 'Tanggal Pembuatan',
+                  content: 'Aplikasi ini dikembangkan pada Mei 2025.',
+                  cardColor: cardColor,
+                  textColor: textColor,
                 ),
-                const SizedBox(height: 16),
-                // Transport
-                Card(
-                  color: cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Transport',
-                          style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Bus\nSubway',
-                          style: TextStyle(color: textColor),
-                        ),
-                      ],
-                    ),
-                  ),
+                buildInfoCard(
+                  icon: Icons.group,
+                  title: 'Dibuat Oleh',
+                  content:
+                      'Femmy Johan, Jennifer Verty, dan Syalsabilla Valentisyesa — Mahasiswa Informatika Universitas Multi Data Palembang.',
+                  cardColor: cardColor,
+                  textColor: textColor,
                 ),
-                const SizedBox(height: 16),
-                // Other Information
-                Card(
-                  color: cardColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Other Information',
-                          style: TextStyle(
-                            color: textColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        // Tambahkan info lain di sini jika perlu
-                      ],
-                    ),
-                  ),
+                buildInfoCard(
+                  icon: Icons.design_services,
+                  title: 'Desain & Fitur',
+                  content:
+                      'Tampilan mendukung mode terang dan gelap, dilengkapi navigasi modern, informasi koleksi museum, fitur favorit, serta kemampuan mengunggah koleksi baru.',
+                  cardColor: cardColor,
+                  textColor: textColor,
+                ),
+                buildInfoCard(
+                  icon: Icons.public,
+                  title: 'Tujuan Pengembangan',
+                  content:
+                      'Meningkatkan literasi budaya masyarakat dan memberikan sarana pembelajaran interaktif tentang seni dan sejarah dunia.',
+                  cardColor: cardColor,
+                  textColor: textColor,
                 ),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: 0,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.black,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
-          BottomNavigationBarItem(icon: Icon(Icons.post_add), label: 'Post'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        onTap: (index) {
-          // Navigasi sesuai kebutuhan aplikasi kamu
-        },
+    );
+  }
+
+  Widget buildInfoCard({
+    required IconData icon,
+    required String title,
+    required String content,
+    required Color? cardColor,
+    required Color textColor,
+  }) {
+    return Card(
+      color: cardColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      elevation: 3,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(icon, color: textColor, size: 28),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: textColor,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    content,
+                    style: TextStyle(
+                      color: textColor.withOpacity(0.9),
+                      fontSize: 15,
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

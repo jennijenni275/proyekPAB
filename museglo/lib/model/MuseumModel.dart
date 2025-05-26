@@ -4,6 +4,7 @@ class Collection {
   final String year;
   final String description;
   final String imageUrl;
+  final String imageBase64;
 
   Collection({
     required this.title,
@@ -11,6 +12,7 @@ class Collection {
     required this.year,
     required this.description,
     required this.imageUrl,
+    required this.imageBase64,
   });
 
   factory Collection.fromMap(Map<String, dynamic> map) {
@@ -20,6 +22,7 @@ class Collection {
       year: map['year'] ?? '',
       description: map['description'] ?? '',
       imageUrl: map['image_url'] ?? '',
+      imageBase64: map['image_base64'] ?? '',
     );
   }
 
@@ -30,12 +33,14 @@ class Collection {
       'year': year,
       'description': description,
       'image_url': imageUrl,
+      'image_base64': imageBase64,
     };
   }
 }
 
 class Museum {
   final String name;
+  final String imgMuseum;
   final String location;
   final String mapsUrl;
   final String openHours;
@@ -43,6 +48,7 @@ class Museum {
 
   Museum({
     required this.name,
+    required this.imgMuseum,
     required this.location,
     required this.mapsUrl,
     required this.openHours,
@@ -50,10 +56,9 @@ class Museum {
   });
 
   factory Museum.fromMap(Map<String, dynamic> map) {
-    List<Collection> collectionsFromMap = [];
-
+    var collectionList = <Collection>[];
     if (map['collections'] != null && map['collections'] is List) {
-      collectionsFromMap =
+      collectionList =
           (map['collections'] as List)
               .map(
                 (item) => Collection.fromMap(Map<String, dynamic>.from(item)),
@@ -63,16 +68,18 @@ class Museum {
 
     return Museum(
       name: map['name'] ?? '',
+      imgMuseum: map['img_museum'] ?? '',
       location: map['location'] ?? '',
       mapsUrl: map['maps_url'] ?? '',
       openHours: map['open_hours'] ?? '',
-      collections: collectionsFromMap,
+      collections: collectionList,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
+      'img_museum': imgMuseum,
       'location': location,
       'maps_url': mapsUrl,
       'open_hours': openHours,
