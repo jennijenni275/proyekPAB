@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     } else if (index == 1) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => SearchingPage()),
+        MaterialPageRoute(builder: (_) => SearchScreen()),
       );
     } else if (index == 2) {
       Navigator.push(

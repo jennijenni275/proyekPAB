@@ -12,7 +12,7 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  void _removeFavorite(dynamic collection) {
+  void _removeFavorite(Collection collection) {
     setState(() {
       FavoriteStorage.favorites.removeWhere(
         (item) =>
@@ -55,12 +55,11 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                       trailing: IconButton(
                         icon: const Icon(Icons.favorite, color: Colors.red),
                         onPressed: () {
-                          // Hapus koleksi dari favorit
                           _removeFavorite(collection);
                         },
                       ),
                       onTap: () {
-                        // Dummy museum hanya berisi satu koleksi favorit yang dipilih
+                        // Buat dummy Museum dengan data wajib diisi supaya tidak error
                         final dummyMuseum = Museum(
                           name: 'Favorites',
                           location: '',
@@ -68,6 +67,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                           openHours: '',
                           collections: [collection],
                         );
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -75,7 +75,6 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                 (context) => DetailScreen(museum: dummyMuseum),
                           ),
                         ).then((_) {
-                          // Jika kembali dari DetailScreen, refresh daftar favorit
                           setState(() {});
                         });
                       },

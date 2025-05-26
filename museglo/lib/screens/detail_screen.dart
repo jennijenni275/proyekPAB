@@ -5,15 +5,23 @@ import 'package:museglo/model/MuseumModel.dart';
 
 class DetailScreen extends StatefulWidget {
   final Museum museum;
+  final int initialIndex;
 
-  const DetailScreen({super.key, required this.museum});
+  const DetailScreen({required this.museum, this.initialIndex = 0, Key? key})
+    : super(key: key);
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  int currentIndex = 0;
+  late int currentIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    currentIndex = widget.initialIndex; // Menyimpan index awal koleksi
+  }
 
   bool isCurrentFavorite() {
     final current = widget.museum.collections[currentIndex];
@@ -66,6 +74,9 @@ class _DetailScreenState extends State<DetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final collection =
+        widget.museum.collections[currentIndex]; // Koleksi saat ini
+
     if (widget.museum.collections.isEmpty) {
       return Scaffold(
         appBar: AppBar(

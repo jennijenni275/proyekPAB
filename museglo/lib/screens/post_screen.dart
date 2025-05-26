@@ -5,8 +5,8 @@ import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:museglo/screens/Homescreen.dart';
-import 'package:museglo/screens/search_screen.dart';
 import 'package:museglo/screens/profile_screen.dart';
+import 'package:museglo/screens/search_screen.dart';
 
 class PostImagePage extends StatefulWidget {
   const PostImagePage({super.key});
@@ -138,7 +138,7 @@ class _PostImagePageState extends State<PostImagePage> {
     } else if (index == 1) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => SearchingPage()),
+        MaterialPageRoute(builder: (_) => SearchScreen()),
       );
     } else if (index == 2) {
       // Stay on Post
