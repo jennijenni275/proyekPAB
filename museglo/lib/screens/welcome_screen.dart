@@ -68,17 +68,6 @@ class _WelcomeScreenState extends State<WelcomeScreen>
                         fit: BoxFit.cover,
                       ),
                     ),
-                    child: const Center(
-                      child: Text(
-                        'MuseGlo',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 4,
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ),

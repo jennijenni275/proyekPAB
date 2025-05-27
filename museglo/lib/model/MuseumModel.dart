@@ -4,7 +4,7 @@ class Collection {
   final String year;
   final String description;
   final String imageUrl;
-  final String imageBase64;
+  final String? imageBase64;
 
   Collection({
     required this.title,
@@ -12,17 +12,48 @@ class Collection {
     required this.year,
     required this.description,
     required this.imageUrl,
-    required this.imageBase64,
+    this.imageBase64,
   });
 
   factory Collection.fromMap(Map<String, dynamic> map) {
+    // Tambahkan debugging prints seperti yang disarankan sebelumnya
+    print('--- Parsing Collection from Map ---');
+    print('Raw Map for Collection: $map');
+
+    // Coba baca dari kedua kemungkinan nama field
+    // Prioritaskan yang tanpa underscore (koleksi baru) karena itu yang ada imageBase64-nya
+    String? imageUrl = map['imageUrl'] as String?; // Coba 'imageUrl' (baru)
+    if (imageUrl == null || imageUrl.isEmpty) {
+      imageUrl =
+          map['image_url'] as String?; // Jika kosong, coba 'image_url' (lama)
+    }
+
+    String? imageBase64 =
+        map['imageBase64'] as String?; // Coba 'imageBase64' (baru)
+    // Untuk imageBase64, tidak perlu fallback ke 'image_base64' karena yang lama tidak punya.
+    // Juga, biarkan null jika memang tidak ada, jangan beri default string kosong
+    // imageBase64: map['image_base64'] ini tidak perlu lagi jika kita asumsi koleksi baru saja yang punya
+
+    // Debugging print untuk hasil parsing
+    print(
+      'Parsed imageUrl: ${imageUrl == null || imageUrl.isEmpty ? 'Empty/Null' : imageUrl}',
+    );
+    print(
+      'Parsed imageBase64: ${imageBase64 == null || imageBase64.isEmpty
+          ? 'Empty/Null'
+          : imageBase64.length < 50
+          ? imageBase64
+          : imageBase64.substring(0, 50) + '... (length: ${imageBase64.length})'}',
+    );
+    print('------------------------------------');
+
     return Collection(
       title: map['title'] ?? '',
       artist: map['artist'] ?? '',
       year: map['year'] ?? '',
       description: map['description'] ?? '',
-      imageUrl: map['image_url'] ?? '',
-      imageBase64: map['image_base64'] ?? '',
+      imageUrl: imageUrl ?? '', // Beri default string kosong jika tetap null
+      imageBase64: imageBase64, // Biarkan null jika tidak ditemukan
     );
   }
 
@@ -32,8 +63,9 @@ class Collection {
       'artist': artist,
       'year': year,
       'description': description,
-      'image_url': imageUrl,
-      'image_base64': imageBase64,
+      // Saat menyimpan, konsisten gunakan nama field yang baru (tanpa underscore)
+      'imageUrl': imageUrl,
+      if (imageBase64 != null) 'imageBase64': imageBase64,
     };
   }
 }

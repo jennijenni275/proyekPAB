@@ -1,10 +1,11 @@
 import 'dart:typed_data';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:museglo/screens/Homescreen.dart';
 import 'package:museglo/screens/search_screen.dart';
 import 'package:museglo/screens/profile_screen.dart';
@@ -17,7 +18,7 @@ class PostImagePage extends StatefulWidget {
 }
 
 class _PostImagePageState extends State<PostImagePage> {
-  Uint8List? _imageBytes; // untuk image yang dipilih
+  String? _imageBase64;
   String? _imageUrl;
   final TextEditingController _descController = TextEditingController();
   final TextEditingController _titleController = TextEditingController();
@@ -43,14 +44,12 @@ class _PostImagePageState extends State<PostImagePage> {
         await FirebaseFirestore.instance.collection('museums').get();
     setState(() {
       _museums =
-          snapshot.docs
-              .map(
-                (doc) => {
-                  'id': doc.id,
-                  'name': doc['name'] ?? 'Museum Tanpa Nama',
-                },
-              )
-              .toList();
+          snapshot.docs.map((doc) {
+            return {
+              'id': doc.id,
+              'name': doc.data()['name'] ?? 'Museum Tanpa Nama',
+            };
+          }).toList();
 
       if (_museums.isNotEmpty) {
         _selectedMuseumId = _museums.first['id'];
@@ -61,34 +60,23 @@ class _PostImagePageState extends State<PostImagePage> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final picked = await picker.pickImage(source: ImageSource.gallery);
-
     if (picked != null) {
       final bytes = await picked.readAsBytes();
       setState(() {
-        _imageBytes = bytes;
+        _imageBase64 = base64Encode(bytes);
       });
     }
   }
 
-  Future<String> _uploadImage() async {
-    final fileName = DateTime.now().millisecondsSinceEpoch.toString();
-    final storageRef = FirebaseStorage.instance.ref().child(
-      'uploads/$fileName.jpg',
-    );
-
-    UploadTask uploadTask = storageRef.putData(
-      _imageBytes!,
-      SettableMetadata(contentType: 'image/jpeg'),
-    );
-    final snapshot = await uploadTask;
-    return await snapshot.ref.getDownloadURL();
-  }
-
   Future<void> _postImage() async {
-    if (_imageBytes == null ||
+    if (_imageBase64 == null ||
         _descController.text.trim().isEmpty ||
-        _selectedMuseumId == null)
+        _selectedMuseumId == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Lengkapi semua data dan pilih gambar!')),
+      );
       return;
+    }
 
     setState(() {
       _isPosting = true;
@@ -96,15 +84,11 @@ class _PostImagePageState extends State<PostImagePage> {
     });
 
     try {
-      // Upload image ke Firebase Storage dulu
-      _imageUrl = await _uploadImage();
-
-      // Simpan data ke Firestore
-      final ref = FirebaseFirestore.instance
+      final museumRef = FirebaseFirestore.instance
           .collection('museums')
           .doc(_selectedMuseumId);
 
-      await ref.collection('collections').add({
+      await museumRef.collection('collections').add({
         'title':
             _titleController.text.trim().isNotEmpty
                 ? _titleController.text.trim()
@@ -118,12 +102,14 @@ class _PostImagePageState extends State<PostImagePage> {
                 ? _yearController.text.trim()
                 : DateTime.now().year.toString(),
         'description': _descController.text.trim(),
-        'imageUrl': _imageUrl ?? '',
+        'imageBase64': _imageBase64 ?? '',
+        'createdAt': FieldValue.serverTimestamp(),
+        'createdBy': FirebaseAuth.instance.currentUser?.uid ?? 'anonymous',
       });
 
       setState(() {
         _isPosted = true;
-        _imageBytes = null;
+        _imageBase64 = null;
         _descController.clear();
         _titleController.clear();
         _artistController.clear();
@@ -149,6 +135,7 @@ class _PostImagePageState extends State<PostImagePage> {
     setState(() {
       _currentIndex = index;
     });
+
     if (index == 0) {
       Navigator.pushReplacement(
         context,
@@ -175,7 +162,7 @@ class _PostImagePageState extends State<PostImagePage> {
     final textColor = isDark ? Colors.white : Colors.black;
 
     final isPostEnabled =
-        _imageBytes != null &&
+        _imageBase64 != null &&
         _descController.text.trim().isNotEmpty &&
         !_isPosting &&
         _selectedMuseumId != null;
@@ -235,11 +222,11 @@ class _PostImagePageState extends State<PostImagePage> {
               child: const Text('+ IMAGE'),
             ),
             const SizedBox(height: 20),
-            _imageBytes != null
+            _imageBase64 != null
                 ? ClipRRect(
                   borderRadius: BorderRadius.circular(8),
                   child: Image.memory(
-                    _imageBytes!,
+                    base64Decode(_imageBase64!),
                     height: 180,
                     fit: BoxFit.cover,
                   ),

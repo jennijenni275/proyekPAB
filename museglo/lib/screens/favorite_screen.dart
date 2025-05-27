@@ -40,14 +40,22 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                     margin: const EdgeInsets.all(10),
                     child: ListTile(
                       leading:
-                          collection.imageBase64.isNotEmpty
+                          (collection.imageBase64 != null &&
+                                  collection.imageBase64!.isNotEmpty)
                               ? Image.memory(
-                                base64Decode(collection.imageBase64),
+                                base64Decode(collection.imageBase64!),
                                 width: 50,
                                 height: 50,
                                 fit: BoxFit.cover,
                               )
-                              : null,
+                              : (collection.imageUrl.isNotEmpty
+                                  ? Image.network(
+                                    collection.imageUrl,
+                                    width: 50,
+                                    height: 50,
+                                    fit: BoxFit.cover,
+                                  )
+                                  : Icon(Icons.image_not_supported)),
                       title: Text(collection.title),
                       subtitle: Text(
                         '${collection.artist} (${collection.year})',

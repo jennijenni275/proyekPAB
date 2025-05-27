@@ -21,7 +21,6 @@ class MainApp extends StatelessWidget {
       builder: (context, mode, _) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'MuseGlo',
           theme: ThemeData.light().copyWith(
             iconTheme: const IconThemeData(color: Colors.black),
           ),
